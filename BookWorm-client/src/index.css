@@ -1,2 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 @import 'tailwindcss';
-@plugin "daisyui";
+
+/* DaisyUI Configuration */
+@plugin "daisyui" {
+  themes: light --default, dark;
+}
+
+:root {
+  /* Default font - Sans for UI elements */
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Serif font for Headings and Book Titles */
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: 'Jost', sans-serif;
+}
+
+/* --- Light Theme: Modern Digital Library --- */
+@plugin "daisyui/theme" {
+  name: 'light';
+  default: true;
+  --color-base-100: #ffffff; /* Clean White */
+  --color-base-200: #f8f9ff; /* Very light indigo tint */
+  --color-base-300: #e5e7eb; /* Borders */
+  --color-base-content: #121823; /* Dark Slate text */
+
+  /* Primary: Your requested shade #5956e9 */
+  --color-primary: #5956e9;
+  --color-primary-content: #ffffff;
+
+  /* Secondary: A complementary soft purple/blue */
+  --color-secondary: #8b89f1;
+
+  /* Accent: To make buttons pop */
+  --color-accent: #3b82f6;
+}
+
+/* --- Dark Theme: Deep Space Library --- */
+@plugin "daisyui/theme" {
+  name: 'dark';
+  --color-base-100: #0f172a; /* Deep Navy Black */
+  --color-base-200: #1e293b;
+  --color-base-300: #334155;
+
+  --color-base-content: #f1f5f9;
+
+  /* Primary: Keeping it bright for dark mode */
+  --color-primary: #5956e9;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #7c3aed;
+  --color-accent: #60a5fa;
+  --color-neutral: #020617;
+}
+
+/* Utility Class for Layout */
+.conCls {
+  @apply container mx-auto px-4 md:px-0;
+}
+
+/* Custom Scrollbar for Library feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-200);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}

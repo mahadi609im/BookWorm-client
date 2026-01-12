@@ -6,14 +6,11 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Toast CSS অবশ্যই ইমপোর্ট করবেন
 
 const HomeLayout = () => {
-  // এখানে আপনার AuthContext থেকে loading স্টেটটি আসবে (পরে আপডেট করবেন)
   const isLoading = false;
 
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen bg-[#FDFCF0]">
-        {' '}
-        {/* Cozy Light Background */}
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <Loading />
@@ -24,22 +21,18 @@ const HomeLayout = () => {
   }
 
   return (
-    // bg-[#FDFCF0] বা bg-stone-50 দিলে একটি লাইব্রেরি বা বইয়ের পাতার ফিল আসবে
-    <div className="flex flex-col min-h-screen transition-all duration-500 bg-[#FDFCF0] font-serif">
-      {/* Sticky Header: যাতে স্ক্রল করলে মেনু দেখা যায় */}
-      <header className="sticky top-0 z-50 shadow-sm">
+    <div className="flex flex-col min-h-screen transition-all duration-500 ">
+      <header className="sticky top-0 z-50 shadow-sm mb-20">
         <Navbar />
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
 
       {/* Footer */}
       <footer className="bg-[#3E2723] text-white">
-        {' '}
-        {/* Dark Brown Footer for Contrast */}
         <Footer />
       </footer>
 

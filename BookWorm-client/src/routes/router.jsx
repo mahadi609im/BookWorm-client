@@ -23,7 +23,7 @@ import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
 import ModerateReviews from '../pages/Dashboard/Admin/ModerateReviews';
 import ManageTutorials from '../pages/Dashboard/Admin/ManageTutorials';
 
-import PrivateRoute from '../Components/PrivateRoute/PrivateRoute';
+// import PrivateRoute from '../Components/PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
   // --- Public Routes ---
@@ -38,12 +38,8 @@ const router = createBrowserRouter([
 
   // --- Main Layout (Common for all for now) ---
   {
-    path: '/',
-    element: (
-      <PrivateRoute>
-        <HomeLayout />
-      </PrivateRoute>
-    ),
+    path: '/', //private
+    element: <HomeLayout />,
     children: [
       {
         index: true,
@@ -74,12 +70,8 @@ const router = createBrowserRouter([
 
   // --- Admin Dashboard (Direct Access for testing) ---
   {
-    path: '/admin-dashboard',
-    element: (
-      <PrivateRoute>
-        <DashBoardLayout />
-      </PrivateRoute>
-    ),
+    path: '/admin-dashboard', //private
+    element: <DashBoardLayout />,
     children: [
       {
         index: true,
