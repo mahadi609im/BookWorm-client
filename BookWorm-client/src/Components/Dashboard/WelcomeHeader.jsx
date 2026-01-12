@@ -15,19 +15,19 @@ const WelcomeHeader = () => {
       <div className="relative conCls z-10 flex flex-col-reverse lg:flex-row gap-12 items-center justify-between px-4">
         {/* Left Side: Text Content */}
         <div className="w-full lg:w-3/5 text-center lg:text-left space-y-8">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] shadow-sm border border-primary/10">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] shadow-sm border border-primary/10">
             <FaSprayCanSparkles className="animate-spin-slow" />
             <span>Search Books Easily</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-black text-base-content leading-[1.1] tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold text-base-content leading-[1.1] tracking-tight">
             Find Your Next <br />
             <span className="text-primary italic">Great Adventure</span>
           </h1>
 
           <p className="text-base-content/70 text-base md:text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
             Welcome back,{' '}
-            <span className="font-black text-primary border-b-2 border-primary/20 pb-0.5">
+            <span className="font-bold text-primary border-b-2 border-primary/20 pb-0.5">
               {user?.displayName?.split(' ')[0] || 'Reader'}
             </span>
             ! Search books using ISBN or Author names and manage your personal
@@ -37,7 +37,7 @@ const WelcomeHeader = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
             <Link
               to="/browse-books"
-              className="btn btn-primary btn-lg px-10 rounded-2xl text-white shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all border-none font-black text-sm uppercase tracking-widest"
+              className="btn btn-primary btn-lg px-10 rounded-2xl text-white shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all border-none font-bold text-sm uppercase tracking-widest"
             >
               Explore Now{' '}
               <FaArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" />
@@ -45,7 +45,7 @@ const WelcomeHeader = () => {
 
             <Link
               to="/my-library"
-              className="btn btn-ghost btn-lg border-2 border-base-300 hover:border-primary px-10 rounded-2xl transition-all font-black text-sm uppercase tracking-widest"
+              className="btn btn-ghost btn-lg border-2 border-base-300 hover:border-primary px-10 rounded-2xl transition-all font-bold text-sm uppercase tracking-widest"
             >
               My Library
             </Link>

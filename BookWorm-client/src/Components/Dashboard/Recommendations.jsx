@@ -17,7 +17,7 @@ const Recommendations = () => {
     <div className="bg-white dark:bg-base-100 p-8 rounded-3xl border border-base-200 shadow-sm">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-2xl font-serif font-black text-base-content">
+          <h2 className="text-2xl font-serif font-bold text-base-content">
             Recommended for You
           </h2>
           <p className="text-sm opacity-60">

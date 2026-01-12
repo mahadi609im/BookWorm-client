@@ -80,10 +80,10 @@ const ManageUsers = () => {
               {stat.icon}
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest font-black text-base-content/40">
+              <p className="text-[10px] uppercase tracking-widest font-bold text-base-content/40">
                 {stat.label}
               </p>
-              <h2 className="text-3xl font-serif font-black">{stat.count}</h2>
+              <h2 className="text-3xl font-serif font-bold">{stat.count}</h2>
             </div>
           </div>
         ))}
@@ -92,7 +92,7 @@ const ManageUsers = () => {
       {/* --- Section 2: Header & Modern Search --- */}
       <div className="flex flex-col lg:flex-row justify-between items-end gap-6">
         <div className="w-full lg:w-auto">
-          <h1 className="text-4xl font-serif font-black tracking-tight italic">
+          <h1 className="text-4xl font-serif font-bold tracking-tight italic">
             Community <span className="text-primary opacity-60">Directory</span>
           </h1>
           <p className="text-sm font-medium text-base-content/50 mt-1">
@@ -120,7 +120,7 @@ const ManageUsers = () => {
               <div className="flex items-center gap-3">
                 {/* নতুন ফিল্টার আইকন */}
                 <HiAdjustmentsHorizontal className="text-primary text-2xl group-hover:rotate-180 transition-transform duration-500" />
-                <span className="uppercase tracking-widest text-[10px] font-black">
+                <span className="uppercase tracking-widest text-[10px] font-bold">
                   {activeTab === 'all' ? 'Sort / Filter' : `Role: ${activeTab}`}
                 </span>
               </div>
@@ -132,7 +132,7 @@ const ManageUsers = () => {
               tabIndex={0}
               className="dropdown-content z-[20] menu p-3 shadow-2xl bg-base-100 rounded-3xl w-full sm:w-56 mt-2 border border-base-200 space-y-1 animate-in slide-in-from-top-2 duration-300"
             >
-              <li className="menu-title text-[9px] uppercase tracking-widest font-black text-base-content/30 pb-2 px-4">
+              <li className="menu-title text-[9px] uppercase tracking-widest font-bold text-base-content/30 pb-2 px-4">
                 Select Status
               </li>
               {['all', 'admin', 'user', 'blocked'].map(tab => (
@@ -162,7 +162,7 @@ const ManageUsers = () => {
         <div className="overflow-x-auto">
           <table className="table w-full border-none">
             <thead>
-              <tr className="bg-base-200/50 text-base-content/40 uppercase text-[9px] tracking-[4px] font-black">
+              <tr className="bg-base-200/50 text-base-content/40 uppercase text-[9px] tracking-[4px] font-bold">
                 <th className="py-6 pl-10">User</th>
                 <th className="py-6">Authorization</th>
                 <th className="py-6">Status</th>
@@ -190,7 +190,7 @@ const ManageUsers = () => {
                         ></div>
                       </div>
                       <div>
-                        <h4 className="font-black text-base leading-tight">
+                        <h4 className="font-bold text-base leading-tight">
                           {user.name}
                         </h4>
                         <span className="text-[10px] text-base-content/40 font-bold uppercase tracking-tighter">
@@ -202,7 +202,7 @@ const ManageUsers = () => {
 
                   <td className="py-6">
                     <div className="flex flex-col">
-                      <span className="text-sm font-black text-base-content/70 italic">
+                      <span className="text-sm font-bold text-base-content/70 italic">
                         {user.role}
                       </span>
                       <div className="flex items-center gap-1.5 text-[11px] text-base-content/30 font-bold">
@@ -213,7 +213,7 @@ const ManageUsers = () => {
 
                   <td className="py-6">
                     <div
-                      className={`badge badge-ghost border-none rounded-lg text-[9px] font-black uppercase tracking-widest px-3 h-6 ${
+                      className={`badge badge-ghost border-none rounded-lg text-[9px] font-bold uppercase tracking-widest px-3 h-6 ${
                         user.status === 'Active'
                           ? 'bg-success/10 text-success'
                           : 'bg-error/10 text-error'
@@ -242,14 +242,14 @@ const ManageUsers = () => {
 
       {/* --- Footer Pagination --- */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 py-4 px-2">
-        <p className="text-[10px] font-black text-base-content/30 uppercase tracking-[2px]">
+        <p className="text-[10px] font-bold text-base-content/30 uppercase tracking-[2px]">
           Viewing 1-10 of 1,284 Bookworms
         </p>
         <div className="btn-group shadow-xl rounded-2xl overflow-hidden shadow-primary/5">
-          <button className="btn btn-md bg-base-100 border-base-200 font-black px-6 hover:bg-primary hover:text-white transition-colors">
+          <button className="btn btn-md bg-base-100 border-base-200 font-bold px-6 hover:bg-primary hover:text-white transition-colors">
             Prev
           </button>
-          <button className="btn btn-md bg-base-100 border-base-200 font-black px-6 hover:bg-primary hover:text-white transition-colors">
+          <button className="btn btn-md bg-base-100 border-base-200 font-bold px-6 hover:bg-primary hover:text-white transition-colors">
             Next
           </button>
         </div>

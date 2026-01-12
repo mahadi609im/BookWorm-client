@@ -82,7 +82,7 @@ const AdminDashboard = () => {
       {/* --- Welcome Header & Quick Actions --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-serif font-black text-base-content">
+          <h1 className="text-3xl font-serif font-bold text-base-content">
             Dashboard <span className="text-primary italic">Overview</span>
           </h1>
           <p className="text-base-content/60 font-medium italic">
@@ -123,10 +123,10 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="mt-5">
-              <p className="text-base-content/50 text-xs font-black uppercase tracking-widest">
+              <p className="text-base-content/50 text-xs font-bold uppercase tracking-widest">
                 {item.title}
               </p>
-              <h2 className="text-3xl font-black text-base-content mt-1">
+              <h2 className="text-3xl font-bold text-base-content mt-1">
                 {item.value}
               </h2>
               <p className="text-[10px] font-bold text-success mt-2 flex items-center gap-1">
@@ -141,7 +141,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Bar Chart */}
         <div className="bg-base-100 p-8 rounded-[2.5rem] border border-base-300 shadow-sm">
-          <h3 className="font-black text-lg mb-8 flex items-center gap-2">
+          <h3 className="font-bold text-lg mb-8 flex items-center gap-2">
             <span className="w-2 h-6 bg-primary rounded-full"></span> Books by
             Genre
           </h3>
@@ -186,7 +186,7 @@ const AdminDashboard = () => {
 
         {/* Area Chart */}
         <div className="bg-base-100 p-8 rounded-[2.5rem] border border-base-300 shadow-sm">
-          <h3 className="font-black text-lg mb-8 flex items-center gap-2">
+          <h3 className="font-bold text-lg mb-8 flex items-center gap-2">
             <span className="w-2 h-6 bg-secondary rounded-full"></span> Reader
             Engagement
           </h3>
@@ -227,7 +227,7 @@ const AdminDashboard = () => {
       <div className="bg-base-100 rounded-[2.5rem] border border-base-300 shadow-sm overflow-hidden">
         <div className="p-8 border-b border-base-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h3 className="font-black text-lg">Pending Review Moderation</h3>
+            <h3 className="font-bold text-lg">Pending Review Moderation</h3>
             <p className="text-xs text-base-content/50 font-medium">
               Verify user reviews before they go public.
             </p>
@@ -243,10 +243,10 @@ const AdminDashboard = () => {
           <table className="table w-full">
             <thead>
               <tr className="bg-base-200/50">
-                <th className="font-black uppercase text-[10px] pl-8">User</th>
-                <th className="font-black uppercase text-[10px]">Book Title</th>
-                <th className="font-black uppercase text-[10px]">Rating</th>
-                <th className="font-black uppercase text-[10px] text-center">
+                <th className="font-bold uppercase text-[10px] pl-8">User</th>
+                <th className="font-bold uppercase text-[10px]">Book Title</th>
+                <th className="font-bold uppercase text-[10px]">Rating</th>
+                <th className="font-bold uppercase text-[10px] text-center">
                   Actions
                 </th>
               </tr>

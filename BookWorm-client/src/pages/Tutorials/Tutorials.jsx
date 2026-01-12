@@ -128,7 +128,7 @@ const Tutorials = () => {
             <FaGraduationCap size={32} />
           </span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-serif font-black text-base-content">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-base-content">
           Learning <span className="text-primary italic">Hub</span>
         </h1>
         <p className="text-base-content/60 font-medium italic">
@@ -166,17 +166,17 @@ const Tutorials = () => {
                     <FaPlay size={18} className="ml-1" />
                   </div>
                 </div>
-                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[9px] font-black px-2 py-0.5 rounded-md">
+                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[9px] font-bold px-2 py-0.5 rounded-md">
                   {video.duration}
                 </div>
               </div>
             </div>
 
             <div className="p-5 space-y-3">
-              <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-primary">
+              <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-primary">
                 <FaYoutube /> {video.channel}
               </div>
-              <h3 className="text-sm font-black text-base-content leading-tight line-clamp-2 min-h-[2.5rem]">
+              <h3 className="text-sm font-bold text-base-content leading-tight line-clamp-2 min-h-[2.5rem]">
                 {video.title}
               </h3>
               <div className="flex justify-between items-center pt-2">
@@ -197,7 +197,7 @@ const Tutorials = () => {
         <div className="flex justify-center pt-6">
           <button
             onClick={() => setShowAll(true)}
-            className="btn btn-outline border-base-300 rounded-2xl px-12 hover:bg-primary hover:border-primary font-black uppercase tracking-widest text-xs h-14"
+            className="btn btn-outline border-base-300 rounded-2xl px-12 hover:bg-primary hover:border-primary font-bold uppercase tracking-widest text-xs h-14"
           >
             Load More Tutorials
           </button>

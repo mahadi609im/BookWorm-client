@@ -1,25 +1,24 @@
-import { Outlet, NavLink, Link } from 'react-router';
+import { Outlet, Link, useNavigate } from 'react-router';
 import {
-  FaBook,
-  FaUsers,
-  FaStar,
-  FaVideo,
-  FaThLarge,
-  FaTags,
   FaSignOutAlt,
   FaMoon,
   FaSun,
   FaUserCircle,
-  FaBell,
   FaBars,
+  FaShieldAlt,
 } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import MenuItems from '../../Components/MenuItems/MenuItems';
+import { AuthContext } from '../../context/AuthContext'; // পাথ ঠিক আছে কিনা নিশ্চিত হয়ে নিন
 
 const DashBoardLayout = () => {
+  const { user, logoutUser } = useContext(AuthContext);
+  const navigate = useNavigate('');
   const [isDark, setIsDark] = useState(
     localStorage.getItem('theme') === 'dark'
   );
+
+  const isAdmin = user?.email === 'maha609im@gmail.com';
 
   useEffect(() => {
     const theme = isDark ? 'dark' : 'light';
@@ -27,37 +26,55 @@ const DashBoardLayout = () => {
     localStorage.setItem('theme', theme);
   }, [isDark]);
 
+  const handleLogout = () => {
+    logoutUser()
+      .then(() => {
+        navigate('/');
+      })
+      .catch(error => console.log('Logout Error:', error));
+  };
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col min-h-screen bg-base-200 font-sans transition-colors duration-300">
-        {/* --- Top Navbar --- */}
+        {/* --- Updated Minimal Top Navbar --- */}
         <header className="h-20 bg-base-100 border-b border-base-300 px-4 md:px-10 flex items-center justify-between sticky top-0 z-30 transition-colors duration-300">
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Toggle & Brand */}
           <div className="flex items-center gap-2 lg:hidden">
             <label
               htmlFor="admin-drawer"
-              className="btn btn-ghost btn-circle drawer-button lg:hidden"
+              className="btn btn-ghost btn-circle drawer-button"
             >
-              <FaBars size={20} />
+              <FaBars size={20} className="text-primary" />
             </label>
-            <Link to="/" className="font-serif font-black text-xl text-primary">
-              BW
+            <Link
+              to="/"
+              className="font-serif font-black text-xl text-primary tracking-tighter"
+            >
+              BW<span className="text-secondary">.</span>
             </Link>
           </div>
 
-          <div className="hidden md:block">
-            <h2 className="text-sm font-black text-base-content/40 uppercase tracking-widest italic">
-              System Dashboard
-            </h2>
+          {/* Desktop Dashboard Title */}
+          <div className="hidden lg:block">
+            <div className="flex items-center gap-2">
+              <FaShieldAlt
+                className={`text-accent ${isAdmin ? 'animate-pulse' : ''}`}
+              />
+              <h2 className="text-sm font-black text-base-content/40 uppercase tracking-[0.3em]">
+                {isAdmin ? 'System Admin' : 'User Panel'}
+              </h2>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-4">
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-3">
             {/* Theme Toggle */}
             <button
               onClick={() => setIsDark(!isDark)}
-              className="btn btn-ghost btn-circle text-xl text-base-content/70"
+              className="btn btn-ghost btn-circle text-xl transition-all active:scale-90"
             >
               {isDark ? (
                 <FaSun className="text-yellow-400" />
@@ -66,49 +83,59 @@ const DashBoardLayout = () => {
               )}
             </button>
 
-            {/* Notifications */}
-            <div className="indicator hidden sm:flex">
-              <span className="indicator-item badge badge-primary badge-xs"></span>
-              <button className="btn btn-ghost btn-circle text-xl text-base-content/70">
-                <FaBell />
-              </button>
-            </div>
-
-            {/* Profile */}
+            {/* Profile Dropdown - Names removed from outside */}
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
-                className="btn btn-ghost gap-2 px-1 md:px-2 rounded-2xl hover:bg-base-200"
+                className="btn btn-ghost btn-circle avatar ring-2 ring-offset-base-100 ring-offset-2 transition-all hover:ring-primary overflow-hidden"
               >
-                <div className="text-right hidden md:block">
-                  <p className="text-xs font-black leading-none">Admin User</p>
-                  <p className="text-[10px] font-medium text-base-content/50">
-                    Admin
-                  </p>
-                </div>
-                <div className="avatar">
-                  <div className="w-9 md:w-10 rounded-xl ring ring-primary ring-offset-base-100 ring-offset-1">
-                    <img
-                      src="https://ui-avatars.com/api/?name=Admin+User&background=641ae6&color=fff"
-                      alt="admin"
-                    />
-                  </div>
+                <div className="w-10 rounded-full">
+                  <img
+                    src={
+                      user?.photoURL ||
+                      `https://ui-avatars.com/api/?name=${
+                        user?.displayName || 'User'
+                      }&background=641ae6&color=fff`
+                    }
+                    alt="profile"
+                  />
                 </div>
               </label>
+
               <ul
                 tabIndex={0}
-                className="mt-3 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-2xl w-52 border border-base-200"
+                className="mt-4 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-2xl w-60 border border-base-200 animate-in fade-in zoom-in duration-200"
               >
-                <li>
-                  <a>
-                    <FaUserCircle /> Profile
-                  </a>
+                <li className="p-4 border-b border-base-200 mb-2 bg-base-200/40 rounded-t-xl">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black text-base-content truncate max-w-[140px]">
+                      {user?.displayName || 'Active User'}
+                    </p>
+                    {isAdmin && (
+                      <FaShieldAlt className="text-accent text-[12px]" />
+                    )}
+                  </div>
+                  <p className="text-[10px] text-base-content/50 truncate italic">
+                    {user?.email}
+                  </p>
                 </li>
-                <li className="divider my-1 opacity-50"></li>
+
                 <li>
-                  <a className="text-error font-bold">
-                    <FaSignOutAlt /> Logout
-                  </a>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 py-3 font-bold hover:text-primary transition-colors"
+                  >
+                    <FaUserCircle className="text-lg" /> View Profile
+                  </Link>
+                </li>
+
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 py-3 text-error font-black hover:bg-error/10 transition-colors"
+                  >
+                    <FaSignOutAlt className="text-lg" /> Logout Session
+                  </button>
                 </li>
               </ul>
             </div>
@@ -116,14 +143,14 @@ const DashBoardLayout = () => {
         </header>
 
         {/* --- Dynamic Content Area --- */}
-        <main className="p-4 md:p-8 lg:p-10">
+        <main className="p-4 md:p-8 lg:p-10 flex-grow">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>
       </div>
 
-      {/* --- Sidebar for Large Screens & Drawer for Mobile --- */}
+      {/* --- Sidebar --- */}
       <div className="drawer-side z-40">
         <label
           htmlFor="admin-drawer"
@@ -131,7 +158,31 @@ const DashBoardLayout = () => {
           className="drawer-overlay"
         ></label>
         <div className="w-72 min-h-full bg-base-100 border-r border-base-300 flex flex-col transition-colors duration-300">
-          <MenuItems />
+          {/* Brand Logo Section */}
+          <div className="p-8 border-b border-base-300">
+            <Link to="/" className="flex items-center gap-2 group">
+              <span className="font-serif font-black text-2xl text-primary tracking-tight">
+                Book<span className="text-secondary">Worm</span>
+              </span>
+            </Link>
+            <p className="text-[10px] font-bold text-base-content/30 uppercase tracking-widest mt-1 italic">
+              Control Center
+            </p>
+          </div>
+
+          <div className="flex-grow overflow-y-auto pt-4">
+            <MenuItems />
+          </div>
+
+          {/* Sidebar Footer Logout */}
+          <div className="p-4 border-t border-base-300">
+            <button
+              onClick={handleLogout}
+              className="btn btn-outline btn-error btn-sm btn-block gap-2 font-bold border-2"
+            >
+              <FaSignOutAlt /> Sign Out
+            </button>
+          </div>
         </div>
       </div>
     </div>

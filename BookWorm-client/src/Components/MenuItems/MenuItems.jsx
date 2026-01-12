@@ -47,11 +47,11 @@ const MenuItems = ({ closeDrawer }) => {
       <div className="p-8 hidden lg:block">
         <Link
           to="/"
-          className="font-serif font-black text-3xl text-primary tracking-tighter"
+          className="font-serif font-bold text-3xl text-primary tracking-tighter"
         >
           Book<span className="text-secondary italic">Worm</span>
         </Link>
-        <p className="text-[10px] font-black uppercase tracking-[3px] text-base-content/40 mt-1 ml-1">
+        <p className="text-[10px] font-bold uppercase tracking-[3px] text-base-content/40 mt-1 ml-1">
           Admin Panel
         </p>
       </div>

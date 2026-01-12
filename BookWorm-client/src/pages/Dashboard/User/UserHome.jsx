@@ -26,7 +26,7 @@ const UserHome = () => {
           {/* ৩. Personalized Recommendations */}
           <section className="relative transition-all duration-300">
             <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-3xl font-serif font-black text-base-content tracking-tight">
+              <h2 className="text-3xl font-serif font-bold text-base-content tracking-tight">
                 Recommended <span className="text-primary italic">Reads</span>
               </h2>
               <div className="h-[1px] flex-1 bg-gradient-to-r from-primary/30 to-transparent"></div>

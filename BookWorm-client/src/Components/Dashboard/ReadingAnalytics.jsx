@@ -16,7 +16,7 @@ const ReadingAnalytics = () => {
     <div className="bg-base-100 p-8 rounded-[2.5rem] border border-base-300 shadow-xl shadow-primary/5 relative overflow-hidden group">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h3 className="text-xl font-serif font-black text-base-content">
+          <h3 className="text-xl font-serif font-bold text-base-content">
             Analytics
           </h3>
           <p className="text-[10px] font-bold text-base-content/40 uppercase tracking-widest">
@@ -41,12 +41,12 @@ const ReadingAnalytics = () => {
                 className="w-full bg-primary rounded-t-lg absolute bottom-0 transition-all duration-700 delay-100 group-hover/bar:bg-secondary cursor-pointer"
                 style={{ height: item.height }}
               >
-                <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-base-content text-base-100 text-[8px] font-black py-1 px-2 rounded transition-opacity">
+                <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-base-content text-base-100 text-[8px] font-bold py-1 px-2 rounded transition-opacity">
                   {item.height}
                 </div>
               </div>
             </div>
-            <span className="text-[10px] font-black text-base-content/30 group-hover/bar:text-primary transition-colors">
+            <span className="text-[10px] font-bold text-base-content/30 group-hover/bar:text-primary transition-colors">
               {item.day}
             </span>
           </div>

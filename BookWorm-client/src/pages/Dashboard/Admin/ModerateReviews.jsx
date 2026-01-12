@@ -103,11 +103,11 @@ const ModerateReviews = () => {
         <div className="space-y-2">
           <div className="flex items-center gap-3 text-primary">
             <HiShieldCheck className="text-3xl" />
-            <span className="uppercase tracking-[4px] text-[10px] font-black opacity-60">
+            <span className="uppercase tracking-[4px] text-[10px] font-bold opacity-60">
               Security Console
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif font-black italic tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold italic tracking-tight">
             Review <span className="text-primary opacity-40">Moderation</span>
           </h1>
           <p className="text-sm font-medium text-base-content/50 max-w-md">
@@ -122,11 +122,11 @@ const ModerateReviews = () => {
               <HiChatBubbleLeftRight />
             </div>
             <div className="flex items-center gap-3">
-              <p className="text-[10px] uppercase font-black text-base-content/40 tracking-[2px]">
+              <p className="text-[10px] uppercase font-bold text-base-content/40 tracking-[2px]">
                 Pending
               </p>
               <div className="w-[1px] h-4 bg-base-200"></div>
-              <p className="text-xl font-black text-base-content">
+              <p className="text-xl font-bold text-base-content">
                 {reviews.filter(r => r.status === 'pending').length}
               </p>
             </div>
@@ -138,7 +138,7 @@ const ModerateReviews = () => {
               className="btn w-full h-16 px-6 rounded-2xl bg-primary text-white border-none shadow-lg shadow-primary/20 group flex items-center gap-3"
             >
               <HiAdjustmentsHorizontal className="text-2xl group-hover:rotate-180 transition-transform duration-500" />
-              <span className="uppercase tracking-widest text-[10px] font-black">
+              <span className="uppercase tracking-widest text-[10px] font-bold">
                 {filterStatus === 'pending' ? 'Pending Only' : 'Show All'}
               </span>
             </button>
@@ -146,7 +146,7 @@ const ModerateReviews = () => {
               tabIndex={0}
               className="dropdown-content z-[20] menu p-3 shadow-2xl bg-base-100 rounded-3xl w-60 mt-2 border border-base-200 space-y-1"
             >
-              <li className="menu-title text-[9px] uppercase tracking-widest font-black text-base-content/30 pb-2 px-4">
+              <li className="menu-title text-[9px] uppercase tracking-widest font-bold text-base-content/30 pb-2 px-4">
                 Filter By Status
               </li>
               <li>
@@ -229,7 +229,7 @@ const ModerateReviews = () => {
             {/* Middle Section: Book Title & Rating */}
             <div className="px-6 pt-5">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-[11px] font-black text-primary uppercase tracking-wider">
+                <p className="text-[11px] font-bold text-primary uppercase tracking-wider">
                   {review.bookTitle}
                 </p>
                 <div className="flex gap-0.5">
@@ -282,7 +282,7 @@ const ModerateReviews = () => {
             <HiCheckCircle className="text-5xl text-success/30" />
           </div>
           <div>
-            <h3 className="text-2xl font-serif font-black italic">
+            <h3 className="text-2xl font-serif font-bold italic">
               No Reviews Found
             </h3>
             <p className="text-sm text-base-content/40 font-medium">

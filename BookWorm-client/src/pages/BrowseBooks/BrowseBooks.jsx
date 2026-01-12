@@ -175,7 +175,7 @@ const BrowseBooks = () => {
         <div className="flex flex-col gap-2">
           {' '}
           {/* গ্যাপ কিছুটা কমানো হয়েছে সুন্দর দেখানোর জন্য */}
-          <h1 className="text-4xl md:text-5xl font-serif font-black text-base-content">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-base-content">
             Explore <span className="text-primary italic">Collection</span>
           </h1>
           <p className="text-base-content/60 text-lg font-medium italic max-w-2xl">
@@ -215,7 +215,7 @@ const BrowseBooks = () => {
         {/* --- ফিল্টার সাইডবার --- */}
         <aside className="space-y-8 lg:sticky lg:top-24 h-fit">
           <div>
-            <h3 className="text-sm font-black uppercase tracking-widest text-base-content/40 mb-4 flex items-center gap-2">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-base-content/40 mb-4 flex items-center gap-2">
               <FaFilter className="text-xs" /> Filter by Genre
             </h3>
             <div className="flex flex-wrap lg:flex-col gap-2">
@@ -256,16 +256,16 @@ const BrowseBooks = () => {
                     />
                     <div className="absolute top-3 right-3  backdrop-blur-2xl px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
                       <FaStar className="text-yellow-500 text-[10px]" />
-                      <span className="text-[10px] font-black">
+                      <span className="text-[10px] font-bold">
                         {book.rating}
                       </span>
                     </div>
                   </div>
                   <div className="px-2 pb-2 flex-1 flex flex-col">
-                    <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">
+                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">
                       {book.genre}
                     </p>
-                    <h3 className="text-lg font-serif font-black text-base-content leading-tight line-clamp-1">
+                    <h3 className="text-lg font-serif font-bold text-base-content leading-tight line-clamp-1">
                       {book.title}
                     </h3>
                     <p className="text-xs text-base-content/50 font-medium mb-4 italic">
@@ -273,7 +273,7 @@ const BrowseBooks = () => {
                     </p>
 
                     <div className="flex gap-2 mt-auto">
-                      <button className="flex-1 bg-primary text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary-focus transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                      <button className="flex-1 bg-primary text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary-focus transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
                         <FaPlusCircle /> Add Shelf
                       </button>
                       <Link
@@ -315,7 +315,7 @@ const BrowseBooks = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentPage(index + 1)}
-                    className={`w-10 h-10 rounded-xl font-black transition-all ${
+                    className={`w-10 h-10 rounded-xl font-bold transition-all ${
                       currentPage === index + 1
                         ? 'bg-primary text-white shadow-lg'
                         : 'hover:bg-base-200'

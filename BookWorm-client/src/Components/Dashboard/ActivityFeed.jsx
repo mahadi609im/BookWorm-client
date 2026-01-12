@@ -64,7 +64,7 @@ const ActivityFeed = () => {
       {/* Feed Header */}
       <div className="flex items-end justify-between px-4">
         <div>
-          <h2 className="text-3xl font-serif font-black text-base-content leading-none tracking-tight">
+          <h2 className="text-3xl font-serif font-bold text-base-content leading-none tracking-tight">
             Pulse <span className="text-primary italic">Feed</span>
           </h2>
           <div className="flex items-center gap-2 mt-2">
@@ -126,11 +126,11 @@ const ActivityFeed = () => {
                 {/* Content Section */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1.5">
-                    <h4 className="font-black text-sm text-base-content truncate group-hover:text-primary transition-colors cursor-pointer">
+                    <h4 className="font-bold text-sm text-base-content truncate group-hover:text-primary transition-colors cursor-pointer">
                       {act.user}
                     </h4>
                     <span
-                      className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase border ${config.style}`}
+                      className={`px-2 py-0.5 rounded-md text-[8px] font-bold uppercase border ${config.style}`}
                     >
                       {config.label}
                     </span>
@@ -148,7 +148,7 @@ const ActivityFeed = () => {
                       <span className="w-1 h-1 rounded-full bg-base-content/20"></span>{' '}
                       {act.time}
                     </span>
-                    <button className="flex items-center gap-1.5 text-[10px] font-black text-primary opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300 uppercase tracking-tighter">
+                    <button className="flex items-center gap-1.5 text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300 uppercase tracking-tighter">
                       Interact <FaArrowRight size={8} />
                     </button>
                   </div>
@@ -161,7 +161,7 @@ const ActivityFeed = () => {
 
       {/* Load More Button */}
       <button className="group w-full py-5 rounded-[2rem] border-2 border-dashed border-base-300 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 mt-4 relative overflow-hidden">
-        <span className="relative z-10 text-xs font-black text-base-content/40 group-hover:text-primary uppercase tracking-[0.2em] flex items-center justify-center gap-3">
+        <span className="relative z-10 text-xs font-bold text-base-content/40 group-hover:text-primary uppercase tracking-[0.2em] flex items-center justify-center gap-3">
           Explore Community <FaBolt className="text-[10px] animate-bounce" />
         </span>
       </button>

@@ -57,7 +57,7 @@ const BookDetails = () => {
               alt={book.title}
               className="w-full object-cover aspect-[3/4]"
             />
-            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2 font-black shadow-lg">
+            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2 font-bold shadow-lg">
               <FaStar className="text-yellow-500" /> {book.rating}
             </div>
           </div>
@@ -66,10 +66,10 @@ const BookDetails = () => {
         {/* ইনফরমেশন */}
         <div className="flex-1 space-y-8">
           <div>
-            <span className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-black uppercase tracking-widest">
+            <span className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-widest">
               {book.genre}
             </span>
-            <h1 className="text-5xl font-serif font-black text-base-content mt-4 leading-tight">
+            <h1 className="text-5xl font-serif font-bold text-base-content mt-4 leading-tight">
               {book.title}
             </h1>
             <p className="text-xl text-base-content/60 font-medium">
@@ -119,7 +119,7 @@ const BookDetails = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 border-t border-base-200 pt-12">
         {/* --- রিভিউ লিখুন (Hiring Requirement) --- */}
         <div className="space-y-6">
-          <h3 className="text-2xl font-serif font-black">
+          <h3 className="text-2xl font-serif font-bold">
             Write a <span className="text-primary italic">Review</span>
           </h3>
           <div className="bg-base-200/50 p-8 rounded-[2.5rem] border border-base-200 space-y-6">
@@ -150,7 +150,7 @@ const BookDetails = () => {
               placeholder="Share your thoughts on this book..."
             ></textarea>
 
-            <button className="btn btn-primary btn-block h-14 rounded-2xl text-white font-black uppercase tracking-widest shadow-xl shadow-primary/30">
+            <button className="btn btn-primary btn-block h-14 rounded-2xl text-white font-bold uppercase tracking-widest shadow-xl shadow-primary/30">
               Submit Review <FaPaperPlane className="ml-2" />
             </button>
             <p className="text-[10px] text-center text-base-content/40 font-bold uppercase tracking-widest">
@@ -161,7 +161,7 @@ const BookDetails = () => {
 
         {/* --- পাবলিক রিভিউ লিস্ট --- */}
         <div className="space-y-6">
-          <h3 className="text-2xl font-serif font-black">
+          <h3 className="text-2xl font-serif font-bold">
             Community <span className="text-primary italic">Reviews</span>
           </h3>
           <div className="space-y-4">
@@ -178,7 +178,7 @@ const BookDetails = () => {
                       </div>
                     </div>
                     <div>
-                      <h4 className="font-black text-sm">{rev.user}</h4>
+                      <h4 className="font-bold text-sm">{rev.user}</h4>
                       <p className="text-[10px] text-base-content/40 font-bold">
                         {rev.date}
                       </p>

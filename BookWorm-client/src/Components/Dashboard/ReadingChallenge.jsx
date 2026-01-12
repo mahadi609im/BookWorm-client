@@ -11,7 +11,7 @@ const ReadingChallenge = () => {
     <div className="bg-base-100 p-8 rounded-[2.5rem] border border-base-300 shadow-xl shadow-primary/5 group relative overflow-hidden transition-all duration-500 hover:shadow-primary/10">
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h3 className="text-xl font-serif font-black text-base-content leading-tight">
+          <h3 className="text-xl font-serif font-bold text-base-content leading-tight">
             Reading
             <br />
             Challenge
@@ -50,16 +50,16 @@ const ReadingChallenge = () => {
           />
         </svg>
         <div className="absolute text-center">
-          <span className="text-3xl font-black text-base-content leading-none">
+          <span className="text-3xl font-bold text-base-content leading-none">
             {progress}%
           </span>
-          <p className="text-[9px] font-black text-base-content/40 uppercase tracking-tighter">
+          <p className="text-[9px] font-bold text-base-content/40 uppercase tracking-tighter">
             Completed
           </p>
         </div>
       </div>
 
-      <button className="w-full mt-6 py-4 rounded-2xl bg-base-200 hover:bg-primary hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
+      <button className="w-full mt-6 py-4 rounded-2xl bg-base-200 hover:bg-primary hover:text-white transition-all duration-300 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
         View Progress <FaChevronRight size={10} />
       </button>
     </div>

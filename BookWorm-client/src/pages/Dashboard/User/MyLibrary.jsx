@@ -38,7 +38,7 @@ const MyLibrary = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-base-200 pb-8">
         <div>
-          <h1 className="text-4xl font-serif font-black text-base-content">
+          <h1 className="text-4xl font-serif font-bold text-base-content">
             My <span className="text-primary italic">Library</span>
           </h1>
           <p className="text-base-content/60 font-medium mt-2">
@@ -52,7 +52,7 @@ const MyLibrary = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+              className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
                 activeTab === tab
                   ? 'bg-primary text-white shadow-lg scale-105'
                   : 'text-base-content/50 hover:text-primary'
@@ -86,10 +86,10 @@ const MyLibrary = () => {
               {stat.icon}
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">
                 {stat.label}
               </p>
-              <h3 className="text-2xl font-black text-base-content mt-0.5">
+              <h3 className="text-2xl font-bold text-base-content mt-0.5">
                 {stat.value}
               </h3>
             </div>
@@ -100,7 +100,7 @@ const MyLibrary = () => {
       {/* Books Grid Area */}
       <section>
         <div className="flex items-center gap-4 mb-8">
-          <h2 className="text-xl font-serif font-black text-base-content capitalize">
+          <h2 className="text-xl font-serif font-bold text-base-content capitalize">
             {activeTab === 'current'
               ? 'Currently Reading'
               : activeTab === 'want'

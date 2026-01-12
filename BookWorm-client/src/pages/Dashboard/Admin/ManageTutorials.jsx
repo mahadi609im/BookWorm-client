@@ -203,7 +203,7 @@ const ManageTutorials = () => {
           <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.2em] text-[10px]">
             <span className="w-8 h-[1px] bg-primary"></span> Admin Panel
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif font-black italic tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold italic tracking-tight">
             Video <span className="text-primary opacity-40">Manager</span>
           </h1>
         </div>
@@ -215,7 +215,7 @@ const ManageTutorials = () => {
         <div className="lg:col-span-4 lg:sticky lg:top-10 z-20 order-1 lg:order-1">
           <div className="bg-base-100 rounded-[2rem] border border-base-200 shadow-xl overflow-hidden">
             <div className="bg-primary px-6 py-4 border-b border-base-200 flex items-center justify-between">
-              <h3 className="text-sm font-black uppercase tracking-widest flex items-center gap-2 text-white  ">
+              <h3 className="text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-white  ">
                 <HiPlus className="text-white " /> Add Video
               </h3>
               <HiSparkles className="text-white animate-pulse" />
@@ -223,7 +223,7 @@ const ManageTutorials = () => {
 
             <form onSubmit={handleAddVideo} className="p-6 space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[9px] uppercase font-black text-base-content/40 ml-1">
+                <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1">
                   Title
                 </label>
                 <input
@@ -239,7 +239,7 @@ const ManageTutorials = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[9px] uppercase font-black text-base-content/40 ml-1">
+                <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1">
                   YouTube URL
                 </label>
                 <div className="relative">
@@ -258,7 +258,7 @@ const ManageTutorials = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[9px] uppercase font-black text-base-content/40 ml-1">
+                <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1">
                   Category
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -269,7 +269,7 @@ const ManageTutorials = () => {
                       onClick={() =>
                         setNewVideo({ ...newVideo, category: cat })
                       }
-                      className={`py-2 rounded-lg text-[9px] font-black uppercase transition-all border ${
+                      className={`py-2 rounded-lg text-[9px] font-bold uppercase transition-all border ${
                         newVideo.category === cat
                           ? 'bg-primary text-white border-primary shadow-md'
                           : 'bg-base-200/30 text-base-content/30 border-transparent hover:border-primary/20'
@@ -282,7 +282,7 @@ const ManageTutorials = () => {
               </div>
 
               <button className="btn btn-primary w-full h-12 rounded-xl border-none shadow-lg shadow-primary/20 group relative overflow-hidden mt-2">
-                <span className="relative z-10 flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px]">
+                <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-[10px]">
                   Publish Now{' '}
                   <HiChevronRight className="group-hover:translate-x-1 transition-transform" />
                 </span>
@@ -308,11 +308,11 @@ const ManageTutorials = () => {
         {/* --- RIGHT SIDE: Scrollable List (lg:col-span-8) --- */}
         <div className="lg:col-span-8 space-y-6 order-2 lg:order-2">
           <div className="flex items-center gap-4 px-2">
-            <h3 className="font-serif text-2xl font-black italic">
+            <h3 className="font-serif text-2xl font-bold italic">
               Active Showcase
             </h3>
             <div className="h-[2px] flex-1 bg-gradient-to-r from-base-300 to-transparent"></div>
-            <div className="text-[10px] font-black opacity-30 uppercase tracking-[0.2em]">
+            <div className="text-[10px] font-bold opacity-30 uppercase tracking-[0.2em]">
               {tutorials.length} Items
             </div>
           </div>
@@ -338,14 +338,14 @@ const ManageTutorials = () => {
                     </div>
                   </div>
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="bg-white/95 backdrop-blur-sm text-primary text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
+                    <span className="bg-white/95 backdrop-blur-sm text-primary text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
                       {video.category || 'Tutorial'}
                     </span>
                   </div>
                 </div>
 
                 <div className="p-6">
-                  <h4 className="font-black text-lg leading-tight mb-4 group-hover:text-primary transition-colors line-clamp-1 italic">
+                  <h4 className="font-bold text-lg leading-tight mb-4 group-hover:text-primary transition-colors line-clamp-1 italic">
                     {video.title}
                   </h4>
                   <div className="flex items-center justify-between pt-4 border-t border-dashed border-base-200">

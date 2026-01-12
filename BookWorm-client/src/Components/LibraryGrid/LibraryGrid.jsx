@@ -171,7 +171,7 @@ const LibraryGrid = ({ activeTab }) => {
         <div className="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center text-3xl mb-4 opacity-50">
           <FaBookOpen />
         </div>
-        <h3 className="text-xl font-black text-base-content/60">
+        <h3 className="text-xl font-bold text-base-content/60">
           No books here yet!
         </h3>
         <p className="text-sm text-base-content/40 mb-6">
@@ -221,7 +221,7 @@ const LibraryGrid = ({ activeTab }) => {
 
               {/* Content Section */}
               <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-lg font-serif font-black text-base-content leading-tight mb-1 truncate">
+                <h3 className="text-lg font-serif font-bold text-base-content leading-tight mb-1 truncate">
                   {book.title}
                 </h3>
                 <p className="text-xs text-base-content/50 font-medium mb-6">
@@ -232,10 +232,10 @@ const LibraryGrid = ({ activeTab }) => {
                   {activeTab === 'current' && (
                     <div className="space-y-3">
                       <div className="flex justify-between items-end">
-                        <p className="text-[10px] font-black text-base-content/40 uppercase tracking-widest">
+                        <p className="text-[10px] font-bold text-base-content/40 uppercase tracking-widest">
                           Progress
                         </p>
-                        <p className="text-xs font-black text-primary">
+                        <p className="text-xs font-bold text-primary">
                           {percentage}%
                         </p>
                       </div>
@@ -247,7 +247,7 @@ const LibraryGrid = ({ activeTab }) => {
                       </div>
                       <button
                         onClick={() => handleUpdateClick(book)}
-                        className="w-full py-3 bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-primary/10"
+                        className="w-full py-3 bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border border-primary/10"
                       >
                         <FaEdit className="inline mr-2" /> Update Pages
                       </button>
@@ -272,7 +272,7 @@ const LibraryGrid = ({ activeTab }) => {
           <div className="relative bg-base-100 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border border-base-200 overflow-hidden">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-serif font-black text-base-content">
+              <h3 className="text-2xl font-serif font-bold text-base-content">
                 Update <span className="text-primary italic">Progress</span>
               </h3>
               <button
@@ -301,7 +301,7 @@ const LibraryGrid = ({ activeTab }) => {
 
             {/* Progress Input */}
             <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/40 ml-1">
+              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-base-content/40 ml-1">
                 Pages Read So Far
               </label>
               <input
@@ -309,10 +309,10 @@ const LibraryGrid = ({ activeTab }) => {
                 value={newProgress}
                 onChange={e => setNewProgress(e.target.value)}
                 max={selectedBook.totalPages}
-                className="w-full bg-base-200 border-none rounded-2xl p-4 text-xl font-black text-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                className="w-full bg-base-200 border-none rounded-2xl p-4 text-xl font-bold text-primary focus:ring-2 focus:ring-primary/20 outline-none"
                 placeholder="Enter page number..."
               />
-              <button className="btn btn-primary w-full h-14 rounded-2xl text-white font-black uppercase tracking-widest shadow-xl shadow-primary/30">
+              <button className="btn btn-primary w-full h-14 rounded-2xl text-white font-bold uppercase tracking-widest shadow-xl shadow-primary/30">
                 Save Progress
               </button>
             </div>

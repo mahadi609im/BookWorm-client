@@ -49,7 +49,7 @@ const ManageBooks = () => {
       <div className="relative overflow-hidden bg-primary/10 p-8 rounded-[2.5rem] border border-primary/20">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-black font-serif text-primary tracking-tight">
+            <h1 className="text-3xl font-bold font-serif text-primary tracking-tight">
               Manage Inventory
             </h1>
             <p className="text-base-content/60 font-medium mt-1">
@@ -156,7 +156,7 @@ const ManageBooks = () => {
         <div className="overflow-x-auto">
           <table className="table table-lg w-full">
             <thead>
-              <tr className="bg-base-200/30 border-none text-base-content/50 uppercase text-[11px] tracking-[2px] font-black">
+              <tr className="bg-base-200/30 border-none text-base-content/50 uppercase text-[11px] tracking-[2px] font-bold">
                 <th className="py-6 pl-10">Book Identity</th>
                 <th>Category</th>
                 <th>Author Details</th>
@@ -179,7 +179,7 @@ const ManageBooks = () => {
                         />
                         {/* Dynamic Status Color Logic */}
                         <div
-                          className={`absolute -bottom-2 -right-2 text-white text-[8px] font-black px-2 py-1 rounded-lg shadow-sm ${
+                          className={`absolute -bottom-2 -right-2 text-white text-[8px] font-bold px-2 py-1 rounded-lg shadow-sm ${
                             book.status === 'In Stock'
                               ? 'bg-success'
                               : book.status === 'Trending'
@@ -191,7 +191,7 @@ const ManageBooks = () => {
                         </div>
                       </div>
                       <div>
-                        <div className="font-black text-base text-base-content leading-tight">
+                        <div className="font-bold text-base text-base-content leading-tight">
                           {book.title}
                         </div>
                         <div className="text-[11px] text-primary font-bold mt-1">
@@ -284,7 +284,7 @@ const ManageBooks = () => {
             <div className="flex-1 overflow-y-auto custom-scrollbar bg-base-100">
               <form className="p-8 lg:p-12 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="form-control">
-                  <label className="label font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <label className="label font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Book Title
                   </label>
                   <input
@@ -295,7 +295,7 @@ const ManageBooks = () => {
                   />
                 </div>
                 <div className="form-control">
-                  <label className="label font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <label className="label font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Author Name
                   </label>
                   <input
@@ -306,7 +306,7 @@ const ManageBooks = () => {
                   />
                 </div>
                 <div className="form-control">
-                  <label className="label font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <label className="label font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Genre / Category
                   </label>
                   <select
@@ -320,7 +320,7 @@ const ManageBooks = () => {
                   </select>
                 </div>
                 <div className="form-control">
-                  <label className="label font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <label className="label font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Total Pages
                   </label>
                   <input
@@ -330,7 +330,7 @@ const ManageBooks = () => {
                   />
                 </div>
                 <div className="form-control col-span-1 md:col-span-2">
-                  <label className="label font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <label className="label font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Book Summary
                   </label>
                   <textarea
@@ -339,7 +339,7 @@ const ManageBooks = () => {
                   ></textarea>
                 </div>
                 <div className="form-control col-span-1 md:col-span-2 mb-4">
-                  <label className="label font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <label className="label font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Cover Artwork
                   </label>
                   <label className="relative border-2 border-dashed border-base-300 rounded-[2rem] p-12 flex flex-col items-center justify-center bg-base-200/20 hover:bg-primary/5 hover:border-primary/30 transition-all cursor-pointer group overflow-hidden">
@@ -353,7 +353,7 @@ const ManageBooks = () => {
                     <span className="font-bold text-sm text-base-content/70 mt-4">
                       Drop your cover here or click to browse
                     </span>
-                    <span className="text-[10px] text-base-content/40 mt-1 uppercase font-black tracking-[1px]">
+                    <span className="text-[10px] text-base-content/40 mt-1 uppercase font-bold tracking-[1px]">
                       Recommended: 2:3 ratio, max 5MB
                     </span>
                   </label>
@@ -373,7 +373,7 @@ const ManageBooks = () => {
               </button>
               <button
                 type="submit"
-                className="btn btn-primary rounded-2xl px-6 h-12 shadow-xl shadow-primary/20 font-black border-none order-1 sm:order-2"
+                className="btn btn-primary rounded-2xl px-6 h-12 shadow-xl shadow-primary/20 font-bold border-none order-1 sm:order-2"
               >
                 Create New Entry
               </button>
@@ -393,7 +393,7 @@ const ManageBooks = () => {
             <div className="w-20 h-20 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
               <FaTrash size={30} />
             </div>
-            <h3 className="font-black text-2xl text-base-content tracking-tight">
+            <h3 className="font-bold text-2xl text-base-content tracking-tight">
               Are you sure?
             </h3>
             <p className="py-4 text-base-content/60 font-medium leading-relaxed">
@@ -406,7 +406,7 @@ const ManageBooks = () => {
                   Cancel
                 </button>
               </form>
-              <button className="btn btn-error text-white rounded-2xl px-6 font-black border-none shadow-lg shadow-error/20 hover:scale-105 transition-transform">
+              <button className="btn btn-error text-white rounded-2xl px-6 font-bold border-none shadow-lg shadow-error/20 hover:scale-105 transition-transform">
                 Yes, Delete
               </button>
             </div>

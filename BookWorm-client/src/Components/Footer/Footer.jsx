@@ -23,7 +23,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand Section */}
           <div className="space-y-4">
-            <h2 className="text-3xl font-serif font-black italic tracking-tight text-base-content">
+            <h2 className="text-3xl font-serif font-bold italic tracking-tight text-base-content">
               Book<span className="text-primary">Worm</span>
             </h2>
             <p className="text-sm text-base-content/70 leading-relaxed italic">
@@ -47,7 +47,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-base-content/40 mb-6">
+            <h3 className="text-[10px] uppercase font-bold tracking-[0.2em] text-base-content/40 mb-6">
               Explore
             </h3>
             <ul className="space-y-3">
@@ -72,7 +72,7 @@ const Footer = () => {
 
           {/* Support Section */}
           <div>
-            <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-base-content/40 mb-6">
+            <h3 className="text-[10px] uppercase font-bold tracking-[0.2em] text-base-content/40 mb-6">
               Support
             </h3>
             <ul className="space-y-3">
@@ -96,7 +96,7 @@ const Footer = () => {
 
           {/* Contact Section */}
           <div>
-            <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-base-content/40 mb-6">
+            <h3 className="text-[10px] uppercase font-bold tracking-[0.2em] text-base-content/40 mb-6">
               Get in Touch
             </h3>
             <ul className="space-y-4">
@@ -126,13 +126,13 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-[10px] uppercase font-black tracking-widest text-base-content/40 text-center md:text-left">
+          <p className="text-[10px] uppercase font-bold tracking-widest text-base-content/40 text-center md:text-left">
             © 2026 BookWorm App. Crafted for the love of reading.
           </p>
 
           <div className="flex items-center gap-2 px-4 py-2 bg-base-100/50 backdrop-blur-sm rounded-2xl border border-base-300 shadow-sm group hover:border-primary/50 transition-all cursor-default">
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(0,89,255,0.5)]"></div>
-            <span className="text-[9px] uppercase font-black text-base-content/60 tracking-tighter">
+            <span className="text-[9px] uppercase font-bold text-base-content/60 tracking-tighter">
               System Status: All Systems Operational
             </span>
           </div>

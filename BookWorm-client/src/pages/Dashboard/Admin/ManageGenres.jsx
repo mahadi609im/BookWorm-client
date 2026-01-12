@@ -73,11 +73,11 @@ const ManageGenres = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-1 bg-primary rounded-full"></div>
-              <span className="text-[10px] uppercase tracking-[4px] font-black text-primary/60">
+              <span className="text-[10px] uppercase tracking-[4px] font-bold text-primary/60">
                 Library Architect
               </span>
             </div>
-            <h1 className="text-4xl lg:text-5xl font-black font-serif tracking-tight text-base-content">
+            <h1 className="text-4xl lg:text-5xl font-bold font-serif tracking-tight text-base-content">
               Manage <span className="text-primary italic">Genres</span>
             </h1>
             <p className="text-base-content/50 font-medium mt-2 max-w-md">
@@ -86,7 +86,7 @@ const ManageGenres = () => {
           </div>
           <button
             onClick={handleAddClick}
-            className="btn btn-primary rounded-2xl px-8 h-16 shadow-2xl shadow-primary/30 font-black border-none gap-3 hover:scale-105 transition-all group"
+            className="btn btn-primary rounded-2xl px-8 h-16 shadow-2xl shadow-primary/30 font-bold border-none gap-3 hover:scale-105 transition-all group"
           >
             <FaPlus className="group-hover:rotate-90 transition-transform" />
             <span className="uppercase tracking-widest text-xs">
@@ -115,7 +115,7 @@ const ManageGenres = () => {
             >
               <div className="flex items-center gap-3">
                 <FaFilter className="text-primary text-sm group-hover:scale-110 transition-transform" />
-                <span className="uppercase tracking-widest text-[10px] font-black">
+                <span className="uppercase tracking-widest text-[10px] font-bold">
                   {filterStatus === 'all'
                     ? 'All Status'
                     : `${filterStatus} Only`}
@@ -128,7 +128,7 @@ const ManageGenres = () => {
               tabIndex={0}
               className="dropdown-content z-20 menu p-3 shadow-2xl bg-base-100 rounded-3xl w-full mt-2 border border-base-200 space-y-1 animate-in slide-in-from-top-2 duration-300"
             >
-              <li className="menu-title text-[9px] uppercase tracking-widest font-black text-base-content/30 pb-2 px-4">
+              <li className="menu-title text-[9px] uppercase tracking-widest font-bold text-base-content/30 pb-2 px-4">
                 Select Status
               </li>
               {[
@@ -165,7 +165,7 @@ const ManageGenres = () => {
         <div className="overflow-x-auto">
           <table className="table w-full border-separate border-spacing-y-2 px-4">
             <thead>
-              <tr className="text-base-content/30 uppercase text-[10px] tracking-[3px] font-black border-none">
+              <tr className="text-base-content/30 uppercase text-[10px] tracking-[3px] font-bold border-none">
                 <th className="py-6 pl-10">Category Details</th>
                 <th className="py-6">Library Reach</th>
                 <th className="py-6">Visibility</th>
@@ -186,10 +186,10 @@ const ManageGenres = () => {
                         <FaLayerGroup size={22} />
                       </div>
                       <div>
-                        <div className="font-black text-base text-base-content">
+                        <div className="font-bold text-base text-base-content">
                           {genre.name}
                         </div>
-                        <div className="text-[10px] text-base-content/40 font-black tracking-widest uppercase mt-0.5">
+                        <div className="text-[10px] text-base-content/40 font-bold tracking-widest uppercase mt-0.5">
                           {genre.id}
                         </div>
                       </div>
@@ -209,7 +209,7 @@ const ManageGenres = () => {
                   </td>
                   <td className="py-5">
                     <div
-                      className={`badge h-7 px-4 rounded-lg font-black text-[9px] uppercase tracking-tighter ${
+                      className={`badge h-7 px-4 rounded-lg font-bold text-[9px] uppercase tracking-tighter ${
                         genre.status === 'Active'
                           ? 'badge-success text-white'
                           : 'badge-ghost opacity-50'
@@ -255,7 +255,7 @@ const ManageGenres = () => {
           >
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-2xl font-black font-serif tracking-tight">
+                <h3 className="text-2xl font-bold font-serif tracking-tight">
                   {isEditMode ? 'Update Genre' : 'Create Genre'}
                 </h3>
                 <p className="text-xs text-white/70 font-bold uppercase tracking-[3px] mt-1">
@@ -276,7 +276,7 @@ const ManageGenres = () => {
             <div className="space-y-6">
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <span className="label-text font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Genre Identity
                   </span>
                 </label>
@@ -304,7 +304,7 @@ const ManageGenres = () => {
 
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-black text-[11px] uppercase tracking-widest text-base-content/50">
+                  <span className="label-text font-bold text-[11px] uppercase tracking-widest text-base-content/50">
                     Visibility Status
                   </span>
                 </label>
@@ -314,7 +314,7 @@ const ManageGenres = () => {
                     onClick={() =>
                       setSelectedGenre({ ...selectedGenre, status: 'Active' })
                     }
-                    className={`btn h-14 rounded-2xl border-2 transition-all font-black ${
+                    className={`btn h-14 rounded-2xl border-2 transition-all font-bold ${
                       selectedGenre.status === 'Active'
                         ? 'btn-primary shadow-md'
                         : 'btn-ghost border-base-200'
@@ -327,7 +327,7 @@ const ManageGenres = () => {
                     onClick={() =>
                       setSelectedGenre({ ...selectedGenre, status: 'Archived' })
                     }
-                    className={`btn h-14 rounded-2xl border-2 transition-all font-black ${
+                    className={`btn h-14 rounded-2xl border-2 transition-all font-bold ${
                       selectedGenre.status === 'Archived'
                         ? 'btn-primary shadow-md'
                         : 'btn-ghost border-base-200'
@@ -356,7 +356,7 @@ const ManageGenres = () => {
                 type="submit"
                 className={`btn ${
                   isEditMode ? 'btn-secondary' : 'btn-primary'
-                } flex-2 rounded-2xl font-black h-14 border-none shadow-lg text-xs uppercase tracking-widest`}
+                } flex-2 rounded-2xl font-bold h-14 border-none shadow-lg text-xs uppercase tracking-widest`}
               >
                 {isEditMode ? 'Update Information' : 'Confirm & Create'}
               </button>
@@ -371,14 +371,14 @@ const ManageGenres = () => {
           <div className="w-20 h-20 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-6">
             <FaExclamationTriangle size={36} />
           </div>
-          <h3 className="font-black text-2xl text-base-content">
+          <h3 className="font-bold text-2xl text-base-content">
             Destructive Action
           </h3>
           <p className="py-4 text-base-content/60 font-medium leading-relaxed">
             Deleting this category might result in orphaned book data.
           </p>
           <div className="flex flex-col gap-3 mt-4">
-            <button className="btn btn-error text-white rounded-2xl h-14 font-black border-none shadow-lg shadow-error/20 uppercase tracking-widest text-xs">
+            <button className="btn btn-error text-white rounded-2xl h-14 font-bold border-none shadow-lg shadow-error/20 uppercase tracking-widest text-xs">
               Confirm Deletion
             </button>
             <form method="dialog">

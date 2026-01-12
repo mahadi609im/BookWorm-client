@@ -55,7 +55,7 @@ const QuickStats = () => {
             <p className="text-xs font-bold opacity-60 uppercase tracking-widest mb-1">
               {stat.label}
             </p>
-            <h3 className="text-2xl font-black text-base-content">
+            <h3 className="text-2xl font-bold text-base-content">
               {stat.value}
             </h3>
           </div>

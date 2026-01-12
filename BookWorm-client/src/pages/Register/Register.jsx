@@ -77,7 +77,7 @@ const Register = () => {
       >
         {/* Title Section */}
         <div className="text-center relative z-10">
-          <h2 className="text-4xl font-serif font-black italic tracking-tight text-base-content">
+          <h2 className="text-4xl font-serif font-bold italic tracking-tight text-base-content">
             Join <span className="text-primary/50">BookWorm</span>
           </h2>
           <p className="mt-2 text-sm text-base-content/60 font-medium italic">
@@ -91,7 +91,7 @@ const Register = () => {
         >
           {/* Full Name */}
           <div className="space-y-1.5">
-            <label className="text-[9px] uppercase font-black text-base-content/40 ml-1 tracking-widest">
+            <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1 tracking-widest">
               Full Name
             </label>
             <div className="relative group/input">
@@ -112,7 +112,7 @@ const Register = () => {
 
           {/* Email */}
           <div className="space-y-1.5">
-            <label className="text-[9px] uppercase font-black text-base-content/40 ml-1 tracking-widest">
+            <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1 tracking-widest">
               Email Address
             </label>
             <div className="relative group/input">
@@ -133,7 +133,7 @@ const Register = () => {
 
           {/* Photo URL */}
           <div className="space-y-1.5 md:col-span-2">
-            <label className="text-[9px] uppercase font-black text-base-content/40 ml-1 tracking-widest">
+            <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1 tracking-widest">
               Profile Photo URL
             </label>
             <div className="relative group/input">
@@ -154,7 +154,7 @@ const Register = () => {
 
           {/* Password */}
           <div className="space-y-1.5 md:col-span-2">
-            <label className="text-[9px] uppercase font-black text-base-content/40 ml-1 tracking-widest">
+            <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1 tracking-widest">
               Password
             </label>
             <div className="relative group/input">
@@ -188,7 +188,7 @@ const Register = () => {
             disabled={loading}
             className="md:col-span-2 btn btn-primary w-full h-14 rounded-2xl border-none shadow-lg shadow-primary/30 group relative overflow-hidden active:scale-95 transition-all"
           >
-            <span className="relative z-10 flex items-center justify-center gap-2 font-black uppercase tracking-widest text-xs text-white">
+            <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-xs text-white">
               {loading ? 'Creating Account...' : 'Create Account'}
               <HiArrowRight className="group-hover:translate-x-1 transition-transform" />
             </span>
@@ -197,7 +197,7 @@ const Register = () => {
         </form>
 
         <div className="relative z-10">
-          <div className="divider text-[9px] uppercase font-black text-base-content/20 tracking-widest">
+          <div className="divider text-[9px] uppercase font-bold text-base-content/20 tracking-widest">
             Quick Join
           </div>
           <button
@@ -216,7 +216,7 @@ const Register = () => {
           Already a BookWorm?{' '}
           <Link
             to="/login"
-            className="text-primary hover:text-primary-focus font-black ml-1 underline underline-offset-4 decoration-primary/20"
+            className="text-primary hover:text-primary-focus font-bold ml-1 underline underline-offset-4 decoration-primary/20"
           >
             Login here
           </Link>

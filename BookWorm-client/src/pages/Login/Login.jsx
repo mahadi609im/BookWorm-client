@@ -32,8 +32,8 @@ const Login = () => {
 
   // Demo Login functionality for Instructors
   const handleDemoLogin = () => {
-    setValue('email', 'admin@bookworm.com');
-    setValue('password', '123456');
+    setValue('email', 'maha609im@gmail.com');
+    setValue('password', 'gotosleep');
     toast.info('Demo credentials applied!', {
       position: 'bottom-center',
       autoClose: 2000,
@@ -46,15 +46,15 @@ const Login = () => {
       const result = await loginUser(data.email, data.password);
       const user = result.user;
 
-      toast.success('Welcome Back!');
-
       // Requirement: Role-based redirection logic
       // backend-এ রোল সেট করা হলে এখানে সেটি চেক করবেন
-      if (user.email === 'admin@bookworm.com') {
-        navigate('/admin/dashboard', { replace: true });
+      if (user.email === 'maha609im@gmail.com') {
+        navigate('/admin-dashboard', { replace: true });
+        toast.success('Welcome Back!');
       } else {
         const from = location.state?.from?.pathname || '/my-library';
         navigate(from, { replace: true });
+        toast.success('Welcome Back!');
       }
     } catch (err) {
       toast.error(err.message || 'Invalid credentials. Please try again.');
@@ -68,7 +68,7 @@ const Login = () => {
       await signInWithGoogle();
       toast.success('Google Login Successful!');
       navigate('/my-library', { replace: true });
-    } catch (err) {
+    } catch {
       toast.error('Google Sign-In failed.');
       setLoading(false);
     }
