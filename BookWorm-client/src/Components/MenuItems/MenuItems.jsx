@@ -43,19 +43,6 @@ const MenuItems = ({ closeDrawer }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* --- Logo Section (Visible only in Large Screens Sidebar) --- */}
-      <div className="p-8 hidden lg:block">
-        <Link
-          to="/"
-          className="font-serif font-bold text-3xl text-primary tracking-tighter"
-        >
-          Book<span className="text-secondary italic">Worm</span>
-        </Link>
-        <p className="text-[10px] font-bold uppercase tracking-[3px] text-base-content/40 mt-1 ml-1">
-          Admin Panel
-        </p>
-      </div>
-
       {/* --- Navigation Links --- */}
       <nav className="flex-1 px-4 space-y-2 mt-4 lg:mt-0">
         {adminLinks.map((link, idx) => (
@@ -77,17 +64,6 @@ const MenuItems = ({ closeDrawer }) => {
           </NavLink>
         ))}
       </nav>
-
-      {/* --- Footer Action --- */}
-      <div className="p-4 border-t border-base-200">
-        <Link
-          to="/"
-          className="flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-error hover:bg-error/10 transition-all group"
-        >
-          <FaSignOutAlt className="group-hover:-translate-x-1 transition-transform" />
-          Back to Site
-        </Link>
-      </div>
     </div>
   );
 };

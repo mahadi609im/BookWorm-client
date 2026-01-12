@@ -162,7 +162,7 @@ const DashBoardLayout = () => {
           <div className="p-8 border-b border-base-300">
             <Link to="/" className="flex items-center gap-2 group">
               <span className="font-serif font-black text-2xl text-primary tracking-tight">
-                Book<span className="text-secondary">Worm</span>
+                Books<span className="text-secondary">Worm</span>
               </span>
             </Link>
             <p className="text-[10px] font-bold text-base-content/30 uppercase tracking-widest mt-1 italic">
@@ -175,12 +175,51 @@ const DashBoardLayout = () => {
           </div>
 
           {/* Sidebar Footer Logout */}
-          <div className="p-4 border-t border-base-300">
+          <div className="p-4 mt-auto border-t border-base-300">
             <button
               onClick={handleLogout}
-              className="btn btn-outline btn-error btn-sm btn-block gap-2 font-bold border-2"
+              className="group flex items-center justify-between w-full p-3 
+               bg-base-200 hover:bg-error/10  cursor-pointer
+               rounded-2xl transition-all duration-300 ease-in-out
+               border border-transparent hover:border-error/20"
             >
-              <FaSignOutAlt /> Sign Out
+              <div className="flex items-center gap-3">
+                {/* আইকন বক্স */}
+                <div
+                  className="w-10 h-10 rounded-xl bg-base-100 flex items-center justify-center 
+                    shadow-sm group-hover:bg-error group-hover:text-white 
+                    transition-all duration-300"
+                >
+                  <FaSignOutAlt className="text-lg" />
+                </div>
+
+                {/* টেক্সট */}
+                <div className="text-left">
+                  <p className="text-xs font-black text-base-content group-hover:text-error transition-colors">
+                    Sign Out
+                  </p>
+                  <p className="text-[10px] text-base-content/40 font-medium">
+                    End current session
+                  </p>
+                </div>
+              </div>
+
+              {/* একটি ছোট অ্যারো যা হোভারে দেখা যাবে */}
+              <div className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+                <svg
+                  className="w-4 h-4 text-error"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
             </button>
           </div>
         </div>

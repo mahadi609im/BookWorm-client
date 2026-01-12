@@ -23,14 +23,15 @@ import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
 import ModerateReviews from '../pages/Dashboard/Admin/ModerateReviews';
 import ManageTutorials from '../pages/Dashboard/Admin/ManageTutorials';
 
-// import PrivateRoute from '../Components/PrivateRoute/PrivateRoute';
+// Note: If you have a PrivateRoute/AdminRoute, apply them to the "element" prop
+// Example: element: <PrivateRoute><MyLibrary /></PrivateRoute>
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomeLayout />, // এই লেআউটে আপনার Navbar এবং Footer আছে
+    element: <HomeLayout />, // This layout contains Navbar and Footer
     children: [
-      // --- Public/Auth Routes (Now they will show Navbar/Footer) ---
+      // --- Public/Auth Routes ---
       {
         path: 'login',
         element: <Login />,
@@ -40,10 +41,10 @@ const router = createBrowserRouter([
         element: <Register />,
       },
 
-      // --- Protected/User Routes ---
+      // --- Main Application/User Routes ---
       {
         index: true,
-        element: <Navigate to="/my-library" />,
+        element: <Navigate to="/my-library" />, // Default landing page
       },
       {
         path: 'dashboard',
@@ -68,10 +69,10 @@ const router = createBrowserRouter([
     ],
   },
 
-  // --- Admin Dashboard (Keeping it separate as it usually has a different sidebar/layout) ---
+  // --- Admin Dashboard Routes ---
   {
     path: '/admin-dashboard',
-    element: <DashBoardLayout />,
+    element: <DashBoardLayout />, // Usually contains a Sidebar and Sidebar-Header
     children: [
       {
         index: true,
@@ -81,10 +82,26 @@ const router = createBrowserRouter([
         path: 'manage-books',
         element: <ManageBooks />,
       },
-      // ... rest of admin routes
+      {
+        path: 'manage-genres',
+        element: <ManageGenres />,
+      },
+      {
+        path: 'manage-users',
+        element: <ManageUsers />,
+      },
+      {
+        path: 'moderate-reviews',
+        element: <ModerateReviews />,
+      },
+      {
+        path: 'manage-tutorials',
+        element: <ManageTutorials />,
+      },
     ],
   },
 
+  // --- 404 Route ---
   {
     path: '*',
     element: <NotFound />,
