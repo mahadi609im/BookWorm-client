@@ -12,7 +12,6 @@ import {
 import { Link } from 'react-router';
 
 const BrowseBooks = () => {
-  // ১. ডামি ডাটা (১২টি বই)
   const allBooks = [
     {
       id: 1,
@@ -22,6 +21,24 @@ const BrowseBooks = () => {
       rating: 4.5,
       cover:
         'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400',
+    },
+    {
+      id: 2,
+      title: 'Atomic Habits',
+      author: 'James Clear',
+      genre: 'Self-Help',
+      rating: 5,
+      cover:
+        'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400',
+    },
+    {
+      id: 3,
+      title: 'Project Hail Mary',
+      author: 'Andy Weir',
+      genre: 'Sci-Fi',
+      rating: 4.9,
+      cover:
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
     },
     {
       id: 4,
@@ -40,15 +57,6 @@ const BrowseBooks = () => {
       rating: 4.8,
       cover:
         'https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 2,
-      title: 'Atomic Habits',
-      author: 'James Clear',
-      genre: 'Self-Help',
-      rating: 5,
-      cover:
-        'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400',
     },
     {
       id: 6,
@@ -76,15 +84,6 @@ const BrowseBooks = () => {
       rating: 4.7,
       cover:
         'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 3,
-      title: 'Project Hail Mary',
-      author: 'Andy Weir',
-      genre: 'Sci-Fi',
-      rating: 4.9,
-      cover:
-        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
     },
     {
       id: 9,
@@ -120,7 +119,34 @@ const BrowseBooks = () => {
       genre: 'Self-Help',
       rating: 4.0,
       cover:
-        'https://images.unsplash.com/photo-1506466010722-395aa2bef877?auto=format&fit=crop&q=80&w=400',
+        'https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=400',
+    },
+    {
+      id: 13,
+      title: 'The Silent Patient',
+      author: 'Alex Michaelides',
+      genre: 'Thriller',
+      rating: 4.6,
+      cover:
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
+    },
+    {
+      id: 14,
+      title: 'Ikigai',
+      author: 'Hector Garcia',
+      genre: 'Self-Help',
+      rating: 4.5,
+      cover:
+        'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400',
+    },
+    {
+      id: 15,
+      title: 'The Hobbit',
+      author: 'J.R.R. Tolkien',
+      genre: 'Fantasy',
+      rating: 4.9,
+      cover:
+        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400',
     },
   ];
 

@@ -14,7 +14,6 @@ const ManageTutorials = () => {
   // ... (State and Functions remain the same)
   const [tutorials, setTutorials] = useState([
     {
-      id: 1,
       title: 'How to Build a Reading Habit',
       channel: 'BookWorm Guides',
       thumbnail:
@@ -23,7 +22,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 2,
       title: 'Top 10 Sci-Fi Books of 2026',
       channel: 'Sci-Fi Central',
       thumbnail:
@@ -32,7 +30,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 3,
       title: 'How to Write Better Book Reviews',
       channel: 'Writing Pro',
       thumbnail:
@@ -41,7 +38,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 4,
       title: 'Mindfulness and Deep Reading',
       channel: 'Calm Mind',
       thumbnail:
@@ -50,7 +46,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 5,
       title: 'Organizing Your Digital Library',
       channel: 'Tech Librarian',
       thumbnail:
@@ -59,7 +54,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 6,
       title: 'Speed Reading Techniques',
       channel: 'Fast Learner',
       thumbnail:
@@ -68,7 +62,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 7,
       title: 'The History of Literature',
       channel: 'History Hub',
       thumbnail:
@@ -77,7 +70,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 8,
       title: 'Self-Help Books That Actually Work',
       channel: 'Improve Daily',
       thumbnail:
@@ -85,9 +77,7 @@ const ManageTutorials = () => {
       duration: '14:20',
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
-    // অতিরিক্ত ৪টি ভিডিও (Load More এর জন্য)
     {
-      id: 9,
       title: 'Mystery Genre Masterclass',
       channel: 'Author Insights',
       thumbnail:
@@ -96,7 +86,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 10,
       title: 'Why We Read Fiction',
       channel: 'Story Soul',
       thumbnail:
@@ -105,7 +94,6 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 11,
       title: 'Modern Poetry Appreciation',
       channel: 'Poets Corner',
       thumbnail:
@@ -114,12 +102,35 @@ const ManageTutorials = () => {
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
     {
-      id: 12,
       title: 'Creating Your Reading Nook',
       channel: 'Cozy Living',
       thumbnail:
         'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=500',
       duration: '13:00',
+      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
+    },
+    {
+      title: 'Classic Novels You Must Read',
+      channel: 'Literary Gems',
+      thumbnail:
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500',
+      duration: '16:25',
+      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
+    },
+    {
+      title: 'How to Read Difficult Books',
+      channel: 'Intellect Path',
+      thumbnail:
+        'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=500',
+      duration: '19:50',
+      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
+    },
+    {
+      title: 'Understanding Narrative Structure',
+      channel: 'Storycraft',
+      thumbnail:
+        'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=500',
+      duration: '22:10',
       link: 'https://www.youtube.com/embed/P6FORpg0KVo',
     },
   ]);

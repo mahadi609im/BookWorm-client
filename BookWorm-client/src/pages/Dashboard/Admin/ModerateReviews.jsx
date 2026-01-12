@@ -12,27 +12,27 @@ import {
 } from 'react-icons/hi2';
 
 const ModerateReviews = () => {
-  const [filterStatus, setFilterStatus] = useState('pending');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // স্টেট ম্যানেজমেন্ট যাতে Approve/Delete কাজ করে
   const [reviews, setReviews] = useState([
     {
       id: 1,
-      userName: 'Anisur Rahman',
+      userName: 'Anisur Rahman', // User List matching
       userImage: 'https://i.pravatar.cc/150?u=1',
       bookTitle: 'The Great Gatsby',
       rating: 5,
       comment:
-        'A masterpiece of American literature. The themes of wealth and love are timeless. Highly recommended for everyone.',
+        'A masterpiece of American literature. The themes of wealth and love are timeless. Highly recommended!',
       date: '12 Jan 2026',
       status: 'pending',
     },
     {
       id: 2,
       userName: 'Sumaiya Akter',
-      userImage: 'https://i.pravatar.cc/150?u=9',
-      bookTitle: 'Atomic Habits',
+      userImage: 'https://i.pravatar.cc/150?u=2',
+      bookTitle: 'Circe',
       rating: 4,
       comment:
         'Very practical advice for building long-term habits. Changed my perspective on daily routines.',
@@ -46,18 +46,18 @@ const ModerateReviews = () => {
       bookTitle: 'The Alchemist',
       rating: 3,
       comment:
-        'Good story but felt a bit too idealistic at times. Still, a classic read.',
+        'Good story but felt a bit too idealistic at times. Still, a classic read for beginners.',
       date: '08 Jan 2026',
       status: 'pending',
     },
     {
       id: 4,
-      userName: 'Mehedi Azad',
+      userName: 'Tanvir Ahmed',
       userImage: 'https://i.pravatar.cc/150?u=4',
-      bookTitle: 'Project Hail Mary',
+      bookTitle: 'Sapiens',
       rating: 5,
       comment:
-        'Best sci-fi I have read in years! The scientific details are fascinating and the bond between characters is heart-touching.',
+        'Fascinating journey through human history. Makes you think differently about our species.',
       date: '05 Jan 2026',
       status: 'approved',
     },
@@ -65,11 +65,121 @@ const ModerateReviews = () => {
       id: 5,
       userName: 'Nusrat Jahan',
       userImage: 'https://i.pravatar.cc/150?u=5',
-      bookTitle: 'Verity',
-      rating: 2,
+      bookTitle: 'Milk and Honey',
+      rating: 5,
       comment:
-        'Too dark and disturbing for my taste. The plot twist was unexpected but I didn’t enjoy the writing style.',
-      date: '02 Jan 2026',
+        'Raw, emotional, and beautiful. Every poem speaks to the soul directly.',
+      date: '12 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 6,
+      userName: 'Ariful Islam',
+      userImage: 'https://i.pravatar.cc/150?u=6',
+      bookTitle: 'Atomic Habits',
+      rating: 4,
+      comment:
+        'Small changes truly make a big difference. This book is a manual for life.',
+      date: '01 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 7,
+      userName: 'Sajid Hossain',
+      userImage: 'https://i.pravatar.cc/150?u=7',
+      bookTitle: 'Verity',
+      rating: 4,
+      comment:
+        'The twist at the end left me speechless! A darker side of fiction that works well.',
+      date: '10 Jan 2026',
+      status: 'approved',
+    },
+    {
+      id: 8,
+      userName: 'Maliha Islam',
+      userImage: 'https://i.pravatar.cc/150?u=8',
+      bookTitle: 'Emma',
+      rating: 5,
+      comment:
+        'Jane Austen at her best. The character development of Emma is just brilliant.',
+      date: '12 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 9,
+      userName: 'Zubayer Alom',
+      userImage: 'https://i.pravatar.cc/150?u=9',
+      bookTitle: 'Clean Code',
+      rating: 5,
+      comment:
+        'Essential reading for every developer. It changed the way I write functions.',
+      date: '11 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 10,
+      userName: 'Farhana Yeasmin',
+      userImage: 'https://i.pravatar.cc/150?u=10',
+      bookTitle: 'The Starry Night',
+      rating: 4,
+      comment:
+        'A visual and narrative treat for art lovers. Beautifully put together.',
+      date: '22 Dec 2025',
+      status: 'approved',
+    },
+    {
+      id: 11,
+      userName: 'Kamrul Hassan',
+      userImage: 'https://i.pravatar.cc/150?u=11',
+      bookTitle: '1984',
+      rating: 5,
+      comment:
+        'Chillingly relevant. Orwell’s vision of the future is a powerful warning.',
+      date: '09 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 12,
+      userName: 'Lutfun Nahar',
+      userImage: 'https://i.pravatar.cc/150?u=12',
+      bookTitle: 'Salt Fat Acid Heat',
+      rating: 4,
+      comment:
+        'Not just a cookbook, but a guide to understanding the science of cooking.',
+      date: '07 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 13,
+      userName: 'Mahmudul Hasan',
+      userImage: 'https://i.pravatar.cc/150?u=13',
+      bookTitle: 'The Hobbit',
+      rating: 5,
+      comment:
+        'A grand adventure that feels cozy and epic at the same time. Love Bilbo!',
+      date: '12 Jan 2026',
+      status: 'approved',
+    },
+    {
+      id: 14,
+      userName: 'Sadia Afrin',
+      userImage: 'https://i.pravatar.cc/150?u=14',
+      bookTitle: 'Thinking Fast and Slow',
+      rating: 5,
+      comment:
+        'A deep dive into cognitive biases. It will make you question your own decisions.',
+      date: '12 Jan 2026',
+      status: 'pending',
+    },
+    {
+      id: 15,
+      userName: 'Tahsin Reza',
+      userImage: 'https://i.pravatar.cc/150?u=15',
+      bookTitle: 'Capital',
+      rating: 4,
+      comment:
+        'A heavy but important read for anyone interested in economics and politics.',
+      date: '10 Jan 2026',
       status: 'pending',
     },
   ]);
