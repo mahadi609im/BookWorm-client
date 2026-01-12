@@ -22,6 +22,7 @@ import ManageGenres from '../pages/Dashboard/Admin/ManageGenres';
 import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
 import ModerateReviews from '../pages/Dashboard/Admin/ModerateReviews';
 import ManageTutorials from '../pages/Dashboard/Admin/ManageTutorials';
+import Profile from '../pages/Profile/Profile';
 
 // Note: If you have a PrivateRoute/AdminRoute, apply them to the "element" prop
 // Example: element: <PrivateRoute><MyLibrary /></PrivateRoute>
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
       },
 
       // --- Main Application/User Routes ---
