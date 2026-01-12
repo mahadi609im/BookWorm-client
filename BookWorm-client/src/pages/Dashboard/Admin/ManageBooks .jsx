@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FaPlus,
   FaEdit,
@@ -41,6 +41,8 @@ const ManageBooks = () => {
     },
   ];
 
+  const [filterItem, setFilterItem] = useState('all');
+
   return (
     <div className="space-y-8 pb-10 animate-in fade-in duration-500">
       {/* --- Glassmorphism Header --- */}
@@ -77,32 +79,75 @@ const ManageBooks = () => {
           />
         </div>
 
-        <div className="flex items-center w-full md:w-64 bg-base-200/50 dark:bg-base-200/30 border border-base-300 dark:border-base-content/10 rounded-xl px-4 hover:border-primary/50 transition-all group relative">
-          <FaFilter
-            size={12}
-            className="text-base-content/40 group-hover:text-primary transition-colors shrink-0"
-          />
-          <select className="select select-sm w-full bg-transparent border-none focus:outline-none focus:ring-0 text-sm font-bold text-base-content/70 group-hover:text-base-content cursor-pointer appearance-none pl-3 pr-6 h-12">
-            <option value="all">All Items</option>
-            <option value="new">New Arrivals</option>
-            <option value="top">Most Popular</option>
-            <option value="archived">Archived</option>
-          </select>
-          <div className="absolute right-4 pointer-events-none text-base-content/30 group-hover:text-primary/70">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
-          </div>
+        {/* --- Re-designed Items Filter (Custom Dropdown) --- */}
+        <div className="dropdown dropdown-end w-full md:w-64">
+          <button
+            tabIndex={0}
+            className="btn w-full h-12 px-4 rounded-xl bg-base-200/50 dark:bg-base-200/30 border border-base-300 dark:border-base-content/10 hover:border-primary/50 flex items-center justify-between transition-all group active:scale-95"
+          >
+            <div className="flex items-center gap-3">
+              <FaFilter
+                size={12}
+                className="text-base-content/40 group-hover:text-primary transition-colors shrink-0"
+              />
+              <span className="text-sm font-bold text-base-content/70 group-hover:text-base-content capitalize">
+                {filterItem === 'all'
+                  ? 'All Items'
+                  : filterItem === 'new'
+                  ? 'New Arrivals'
+                  : filterItem === 'top'
+                  ? 'Most Popular'
+                  : 'Archived'}
+              </span>
+            </div>
+
+            <div className="text-base-content/30 group-hover:text-primary/70">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+          </button>
+
+          <ul
+            tabIndex={0}
+            className="dropdown-content z-[20] menu p-2 shadow-2xl bg-base-100 rounded-2xl w-full mt-2 border border-base-200 space-y-1 animate-in slide-in-from-top-2 duration-300"
+          >
+            {[
+              { label: 'All Items', value: 'all' },
+              { label: 'New Arrivals', value: 'new' },
+              { label: 'Most Popular', value: 'top' },
+              { label: 'Archived', value: 'archived' },
+            ].map(item => (
+              <li key={item.value}>
+                <button
+                  onClick={() => {
+                    setFilterItem(item.value); // State definition: const [filterItem, setFilterItem] = useState('all');
+                    document.activeElement.blur();
+                  }}
+                  className={`font-bold text-xs rounded-lg py-2.5 px-3 flex justify-between items-center ${
+                    filterItem === item.value
+                      ? 'bg-primary text-white shadow-md shadow-primary/20'
+                      : 'hover:bg-primary/10 hover:text-primary text-base-content/60'
+                  }`}
+                >
+                  {item.label}
+                  {filterItem === item.value && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-white shadow-sm"></span>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
