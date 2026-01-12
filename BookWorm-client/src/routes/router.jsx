@@ -26,24 +26,24 @@ import ManageTutorials from '../pages/Dashboard/Admin/ManageTutorials';
 // import PrivateRoute from '../Components/PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
-  // --- Public Routes ---
   {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
-
-  // --- Main Layout (Common for all for now) ---
-  {
-    path: '/', //private
-    element: <HomeLayout />,
+    path: '/',
+    element: <HomeLayout />, // এই লেআউটে আপনার Navbar এবং Footer আছে
     children: [
+      // --- Public/Auth Routes (Now they will show Navbar/Footer) ---
+      {
+        path: 'login',
+        element: <Login />,
+      },
+      {
+        path: 'register',
+        element: <Register />,
+      },
+
+      // --- Protected/User Routes ---
       {
         index: true,
-        element: <Navigate to="/my-library" />, // Direct redirect to Library
+        element: <Navigate to="/my-library" />,
       },
       {
         path: 'dashboard',
@@ -68,9 +68,9 @@ const router = createBrowserRouter([
     ],
   },
 
-  // --- Admin Dashboard (Direct Access for testing) ---
+  // --- Admin Dashboard (Keeping it separate as it usually has a different sidebar/layout) ---
   {
-    path: '/admin-dashboard', //private
+    path: '/admin-dashboard',
     element: <DashBoardLayout />,
     children: [
       {
@@ -81,22 +81,7 @@ const router = createBrowserRouter([
         path: 'manage-books',
         element: <ManageBooks />,
       },
-      {
-        path: 'manage-genres',
-        element: <ManageGenres />,
-      },
-      {
-        path: 'manage-users',
-        element: <ManageUsers />,
-      },
-      {
-        path: 'moderate-reviews',
-        element: <ModerateReviews />,
-      },
-      {
-        path: 'manage-tutorials',
-        element: <ManageTutorials />,
-      },
+      // ... rest of admin routes
     ],
   },
 

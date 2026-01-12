@@ -1,13 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { NavLink, Link } from 'react-router';
-import { FaMoon, FaSun } from 'react-icons/fa';
+import { FaMoon, FaSun, FaSignOutAlt, FaUserEdit } from 'react-icons/fa';
+import { AuthContext } from '../../context/AuthContext'; // আপনার ফোল্ডার স্ট্রাকচার অনুযায়ী পাথ ঠিক করে নিন
 
 const Navbar = () => {
-  // Ekhonkar moto user check bad dilam testing-er jonno
+  const { user, logoutUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
+  // Theme Sync
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -17,6 +19,7 @@ const Navbar = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  // Click Outside to close dropdown
   useEffect(() => {
     const handleClickOutside = e => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -26,6 +29,14 @@ const Navbar = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+    logoutUser()
+      .then(() => {
+        setOpen(false);
+      })
+      .catch(error => console.log('Logout Error:', error));
+  };
 
   const navLinks = [
     { name: 'Dashboard', path: '/dashboard' },
@@ -64,12 +75,16 @@ const Navbar = () => {
                 <NavLink to={link.path}>{link.name}</NavLink>
               </li>
             ))}
-            <li className="border-t border-base-300 mt-2">
-              <NavLink to="/login">Login</NavLink>
-            </li>
-            <li>
-              <NavLink to="/register">Register</NavLink>
-            </li>
+            {!user && (
+              <>
+                <li className="border-t border-base-300 mt-2">
+                  <Link to="/login">Login</Link>
+                </li>
+                <li>
+                  <Link to="/register">Register</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
 
@@ -80,6 +95,7 @@ const Navbar = () => {
         </Link>
       </div>
 
+      {/* Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal gap-2">
           {navLinks.map((link, idx) => (
@@ -89,7 +105,7 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `px-4 py-2 rounded-lg font-bold transition-all ${
                     isActive
-                      ? 'bg-primary text-primary-content shadow-sm'
+                      ? 'bg-primary text-primary-content shadow-md'
                       : 'hover:bg-primary/10 text-base-content/80 hover:text-primary'
                   }`
                 }
@@ -101,10 +117,11 @@ const Navbar = () => {
         </ul>
       </div>
 
-      <div className="navbar-end flex items-center gap-3">
+      <div className="navbar-end flex items-center gap-2 md:gap-4">
+        {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="btn btn-ghost btn-circle text-xl"
+          className="btn btn-ghost btn-circle text-xl transition-transform hover:rotate-12"
         >
           {theme === 'light' ? (
             <FaMoon className="text-primary" />
@@ -113,43 +130,70 @@ const Navbar = () => {
           )}
         </button>
 
-        {/* User profile dropdown - Always visible for UI testing */}
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setOpen(!open)}
-            className="btn btn-ghost btn-circle avatar border-2 border-primary/20 p-0.5"
-          >
-            <div className="w-10 rounded-full">
-              <img src="https://i.ibb.co/mR4tYpX/user.png" alt="Avatar" />
-            </div>
-          </button>
-          {open && (
-            <ul className="absolute right-0 mt-4 w-60 p-2 shadow-2xl rounded-xl bg-base-100 border border-base-300 z-50 animate-in fade-in zoom-in duration-200">
-              <li className="p-4 border-b border-base-300">
-                <p className="text-[10px] uppercase font-bold opacity-60">
-                  Testing Mode
-                </p>
-                <p className="text-sm font-black truncate">Demo User</p>
-              </li>
-              <li>
-                <Link
-                  to="/admin-dashboard"
-                  className="flex p-3 hover:bg-primary/10 rounded-lg"
-                >
-                  Admin Panel
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/login"
-                  className="flex p-3 text-error hover:bg-error/10 rounded-lg font-bold"
-                >
-                  Logout (Demo)
-                </Link>
-              </li>
-            </ul>
-          )}
-        </div>
+        {user ? (
+          /* Logged In User Profile */
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setOpen(!open)}
+              className="btn btn-ghost btn-circle avatar border-2 border-primary/30 p-0.5 hover:border-primary transition-all"
+            >
+              <div className="w-10 rounded-full bg-base-300 border border-base-300 overflow-hidden">
+                <img
+                  src={user?.photoURL || 'https://i.ibb.co/mR4tYpX/user.png'}
+                  alt="User Avatar"
+                  title={user?.displayName || 'User'}
+                />
+              </div>
+            </button>
+            {open && (
+              <ul className="absolute right-0 mt-4 w-64 p-2 shadow-2xl rounded-2xl bg-base-100 border border-base-300 z-50 animate-in fade-in zoom-in duration-200">
+                <li className="p-4 border-b border-base-300 mb-2">
+                  <p className="text-xs uppercase font-black text-primary/60 tracking-widest">
+                    Active Member
+                  </p>
+                  <p className="text-sm font-black truncate text-base-content">
+                    {user?.displayName || 'Anonymous User'}
+                  </p>
+                  <p className="text-[10px] text-base-content/60 truncate italic">
+                    {user?.email}
+                  </p>
+                </li>
+                <li>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 p-3 hover:bg-primary/10 rounded-xl transition-colors text-sm font-bold"
+                  >
+                    <FaUserEdit className="text-primary" /> Edit Profile
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 p-3 text-error hover:bg-error/10 rounded-xl transition-colors text-sm font-bold"
+                  >
+                    <FaSignOutAlt /> Sign Out
+                  </button>
+                </li>
+              </ul>
+            )}
+          </div>
+        ) : (
+          /* Login/Register Buttons for Guest */
+          <div className="hidden md:flex items-center gap-2">
+            <Link
+              to="/login"
+              className="btn btn-ghost btn-sm font-bold lowercase"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="btn btn-primary btn-sm px-6 rounded-lg font-bold shadow-lg shadow-primary/20"
+            >
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

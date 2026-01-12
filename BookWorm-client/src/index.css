@@ -40,14 +40,11 @@ h3,
 /* --- Dark Theme: Deep Cosmic Blue (As per images) --- */
 @plugin "daisyui/theme" {
   name: 'dark';
-  /* Background: Using the darkest navy from the image instead of pure black */
-  --color-base-100: #030923; /* মূল ব্যাকগ্রাউন্ড (সবচেয়ে গাঢ় নীল) */
-  --color-base-200: #040e30; /* কার্ড এবং সেকশন ব্যাকগ্রাউন্ড */
-  --color-base-300: #0a2647; /* বর্ডার এবং হোভার স্টেট */
+  --color-base-100: #030923;
+  --color-base-200: #040e30;
+  --color-base-300: #0a2647;
 
-  --color-base-content: #f1f5f9; /* টেক্সট কালার (সাদাটে নীল) */
-
-  /* Primary: The signature 'Electric Blue' from the reference image */
+  --color-base-content: #f1f5f9;
   --color-primary: #0059ff;
   --color-primary-content: #ffffff;
 
