@@ -11,8 +11,6 @@ const WelcomeHeader = () => {
   return (
     <div className="relative bg-base-100 py-12 lg:py-24 overflow-hidden border-b border-base-200 transition-colors duration-300">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/5 rounded-l-full -z-0 hidden lg:block animate-pulse"></div>
-      <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
 
       <div className="relative conCls z-10 flex flex-col-reverse lg:flex-row gap-12 items-center justify-between px-4">
         {/* Left Side: Text Content */}

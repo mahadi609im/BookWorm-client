@@ -20,42 +20,45 @@ h3,
   font-family: 'Jost', sans-serif;
 }
 
-/* --- Light Theme: Modern Digital Library --- */
+/* --- Light Theme: Crisp Blue Professional --- */
 @plugin "daisyui/theme" {
   name: 'light';
   default: true;
-  --color-base-100: #ffffff; /* Clean White */
-  --color-base-200: #f8f9ff; /* Very light indigo tint */
-  --color-base-300: #e5e7eb; /* Borders */
-  --color-base-content: #121823; /* Dark Slate text */
+  --color-base-100: #ffffff; /* Pure White */
+  --color-base-200: #f8fafc; /* Soft grayish blue tint */
+  --color-base-300: #e2e8f0;
+  --color-base-content: #030923; /* Deep Navy from image */
 
-  /* Primary: Your requested shade #5956e9 */
-  --color-primary: #5956e9;
+  /* Primary: The vibrant electric blue (#0059FF) from the palette */
+  --color-primary: #0059ff;
   --color-primary-content: #ffffff;
 
-  /* Secondary: A complementary soft purple/blue */
-  --color-secondary: #8b89f1;
-
-  /* Accent: To make buttons pop */
-  --color-accent: #3b82f6;
+  --color-secondary: #041a53; /* Mid-tone Navy */
+  --color-accent: #00d1ff; /* Cyan accent for highlights */
 }
 
-/* --- Dark Theme: Deep Space Library --- */
+/* --- Dark Theme: Deep Cosmic Blue (As per images) --- */
 @plugin "daisyui/theme" {
   name: 'dark';
-  --color-base-100: #0f172a; /* Deep Navy Black */
-  --color-base-200: #1e293b;
-  --color-base-300: #334155;
+  /* Background: Using the darkest navy from the image instead of pure black */
+  --color-base-100: #030923; /* মূল ব্যাকগ্রাউন্ড (সবচেয়ে গাঢ় নীল) */
+  --color-base-200: #040e30; /* কার্ড এবং সেকশন ব্যাকগ্রাউন্ড */
+  --color-base-300: #0a2647; /* বর্ডার এবং হোভার স্টেট */
 
-  --color-base-content: #f1f5f9;
+  --color-base-content: #f1f5f9; /* টেক্সট কালার (সাদাটে নীল) */
 
-  /* Primary: Keeping it bright for dark mode */
-  --color-primary: #5956e9;
+  /* Primary: The signature 'Electric Blue' from the reference image */
+  --color-primary: #0059ff;
   --color-primary-content: #ffffff;
 
-  --color-secondary: #7c3aed;
-  --color-accent: #60a5fa;
-  --color-neutral: #020617;
+  /* Secondary: A subtle purple-blue blend found in the gradients */
+  --color-secondary: #312ecb;
+
+  /* Accent: High contrast cyan/light blue */
+  --color-accent: #00d1ff;
+
+  --color-info: #0059ff;
+  --color-neutral: #000000;
 }
 
 /* Utility Class for Layout */
