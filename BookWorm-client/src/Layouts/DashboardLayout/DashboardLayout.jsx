@@ -12,6 +12,7 @@ import MenuItems from '../../Components/MenuItems/MenuItems';
 import { AuthContext } from '../../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import Loading from '../../Components/Loading/Loading';
 
 const DashBoardLayout = () => {
   const { user, logoutUser } = useContext(AuthContext);
