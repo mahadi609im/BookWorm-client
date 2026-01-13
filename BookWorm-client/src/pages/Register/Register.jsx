@@ -35,31 +35,28 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const handleRegister = async data => {
     setLoading(true);
     try {
-      // ১. Firebase Auth
       await registerUser(data.email, data.password);
       await updateUserProfile({
         displayName: data.name,
         photoURL: data.photo,
       });
 
-      // আপনার ডাটাবেস স্ট্রাকচার অনুযায়ী অবজেক্ট
       const newUser = {
-        name: data.name,
+        displayName: data.name,
         email: data.email,
-        image: data.photo, // আপনার DB তে ফিল্ডের নাম 'image'
+        photoURL: data.photo,
         role: 'user',
         status: 'active',
-        joined: new Date().toLocaleDateString('en-GB', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-        }), // '20 Dec 2025' ফরম্যাট
+        joined: new Date().toISOString(),
         readingChallenge: {
           annualGoal: 0,
           booksReadThisYear: 0,
+          totalPagesRead: 0,
+          readingStreak: 0,
         },
         genreBreakdown: [],
         recentActivity: [],
@@ -78,7 +75,7 @@ const Register = () => {
     }
   };
 
-  // গুগল সাইন-ইন (বক্সের ভেতরেই ডাটাবেস অপারেশন)
+  // গুগল সাইন-ইন আপডেট
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
@@ -86,25 +83,22 @@ const Register = () => {
       const user = result.user;
 
       const googleUser = {
-        name: user.displayName,
+        displayName: user.displayName,
         email: user.email,
-        image: user.photoURL, // DB ফিল্ড 'image'
+        photoURL: user.photoURL,
         role: 'user',
         status: 'active',
-        joined: new Date().toLocaleDateString('en-GB', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-        }),
+        joined: new Date().toISOString(),
         readingChallenge: {
           annualGoal: 0,
           booksReadThisYear: 0,
+          totalPagesRead: 0,
+          readingStreak: 0,
         },
         genreBreakdown: [],
         recentActivity: [],
       };
 
-      // এখানে fetch এর বদলে axiosSecure ব্যবহার করুন consistency এর জন্য
       const res = await axiosSecure.post('/users', googleUser);
 
       if (res.data.insertedId || res.status === 200) {

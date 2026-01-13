@@ -10,6 +10,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import Loading from '../../../Components/Loading/Loading';
 
 const ManageBooks = () => {
   const queryClient = useQueryClient();
@@ -219,7 +220,7 @@ const ManageBooks = () => {
               {isLoading ? (
                 <tr>
                   <td colSpan="4" className="text-center py-20">
-                    <span className="loading loading-spinner loading-lg text-primary"></span>
+                    <Loading></Loading>
                   </td>
                 </tr>
               ) : books.length === 0 ? (

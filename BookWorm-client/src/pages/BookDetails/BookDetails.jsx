@@ -71,12 +71,12 @@ const BookDetails = () => {
       bookId: id,
       userName: user?.displayName,
       userEmail: user?.email,
-      userPhoto: user?.photoURL, // এই লাইনটি যোগ করা হয়েছে
+      userImage: user?.photoURL,
       rating: userRating,
       comment: reviewText,
       date: new Date().toLocaleDateString(),
       status: 'pending',
-      bookTitle: book.title, // অ্যাডমিন প্যানেলে দেখার সুবিধার জন্য
+      bookTitle: book.title,
     };
 
     try {

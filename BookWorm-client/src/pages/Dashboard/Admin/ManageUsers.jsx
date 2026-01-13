@@ -81,7 +81,7 @@ const ManageUsers = () => {
     }
     const newRole = user.role === 'admin' ? 'user' : 'admin';
     Swal.fire({
-      title: `Change role for ${user.name}?`,
+      title: `Change role for ${user.displayName}?`,
       text: `Promoting to ${newRole.toUpperCase()}`,
       icon: 'question',
       showCancelButton: true,
@@ -111,7 +111,7 @@ const ManageUsers = () => {
   // সার্চ ফিল্টারিং (Client-side with debounced value)
   const filteredUsers = users.filter(
     user =>
-      user.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+      user.displayName?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
       user.email?.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
@@ -245,16 +245,15 @@ const ManageUsers = () => {
                         <div className="relative flex-shrink-0">
                           <img
                             src={
-                              user.image ||
-                              user.photo ||
-                              'https://via.placeholder.com/150'
+                              user.photoURL ||
+                              'https://i.pinimg.com/736x/a2/21/0b/a2210be814fed675ce5cf9bf3b7141e0.jpg'
                             }
                             className={`w-12 h-12 rounded-2xl object-cover border-2 shadow-sm ${
                               isBlocked
                                 ? 'border-error grayscale'
                                 : 'border-success'
                             }`}
-                            alt={user.name}
+                            alt={user.displayName}
                           />
                           <div
                             className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-base-100 ${
@@ -272,7 +271,7 @@ const ManageUsers = () => {
                                 : 'group-hover:text-primary'
                             }`}
                           >
-                            {user.name}
+                            {user.displayName}
                           </h4>
                           <span className="text-[10px] text-base-content/40 block font-medium uppercase tracking-tighter">
                             Since {user.joined || 'N/A'}

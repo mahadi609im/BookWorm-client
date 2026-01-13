@@ -9,16 +9,33 @@ import {
 } from 'react-icons/fa';
 import { useState, useEffect, useContext } from 'react';
 import MenuItems from '../../Components/MenuItems/MenuItems';
-import { AuthContext } from '../../context/AuthContext'; // পাথ ঠিক আছে কিনা নিশ্চিত হয়ে নিন
+import { AuthContext } from '../../context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const DashBoardLayout = () => {
   const { user, logoutUser } = useContext(AuthContext);
-  const navigate = useNavigate('');
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(
     localStorage.getItem('theme') === 'dark'
   );
 
-  const isAdmin = user?.email === 'maha609im@gmail.com';
+  // ১. ডাটাবেজ থেকে ইউজারের লেটেস্ট তথ্য আনা (প্রোফাইল সিঙ্কের জন্য)
+  // এটি Navbar এবং Profile পেজের সাথে একই queryKey শেয়ার করছে
+  const { data: dbUser = {}, isLoading } = useQuery({
+    queryKey: ['dbUser', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return {};
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  // Admin Check (dbUser থেকে চেক করা বেশি নিরাপদ)
+  const isAdmin =
+    dbUser?.role === 'admin' || user?.email === 'maha609im@gmail.com';
 
   useEffect(() => {
     const theme = isDark ? 'dark' : 'light';
@@ -31,15 +48,17 @@ const DashBoardLayout = () => {
       .then(() => {
         navigate('/');
       })
-      .catch(error => console.log('Logout Error:', error));
+      .catch(error => console.error('Logout Error:', error));
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="drawer lg:drawer-open">
       <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col min-h-screen bg-base-200 font-sans transition-colors duration-300">
-        {/* --- Updated Minimal Top Navbar --- */}
+        {/* --- Minimal Top Navbar --- */}
         <header className="h-20 bg-base-100 border-b border-base-300 px-4 md:px-10 flex items-center justify-between sticky top-0 z-30 transition-colors duration-300">
           {/* Mobile Menu Toggle & Brand */}
           <div className="flex items-center gap-2 lg:hidden">
@@ -83,15 +102,17 @@ const DashBoardLayout = () => {
               )}
             </button>
 
-            {/* Profile Dropdown - Names removed from outside */}
+            {/* Profile Dropdown */}
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
                 className="btn btn-ghost btn-circle avatar ring-2 ring-offset-base-100 ring-offset-2 transition-all hover:ring-primary overflow-hidden"
               >
                 <div className="w-10 rounded-full">
+                  {/* UPDATED: dbUser-এর লেটেস্ট ফটো */}
                   <img
                     src={
+                      dbUser?.photoURL ||
                       user?.photoURL ||
                       `https://ui-avatars.com/api/?name=${
                         user?.displayName || 'User'
@@ -108,8 +129,11 @@ const DashBoardLayout = () => {
               >
                 <li className="p-4 border-b border-base-200 mb-2 bg-base-200/40 rounded-t-xl">
                   <div className="flex items-center gap-2">
+                    {/* UPDATED: dbUser-এর লেটেস্ট নাম */}
                     <p className="text-sm font-black text-base-content truncate max-w-[140px]">
-                      {user?.displayName || 'Active User'}
+                      {dbUser?.displayName ||
+                        user?.displayName ||
+                        'Active User'}
                     </p>
                     {isAdmin && (
                       <FaShieldAlt className="text-accent text-[12px]" />
@@ -184,7 +208,6 @@ const DashBoardLayout = () => {
                border border-transparent hover:border-error/20"
             >
               <div className="flex items-center gap-3">
-                {/* আইকন বক্স */}
                 <div
                   className="w-10 h-10 rounded-xl bg-base-100 flex items-center justify-center 
                     shadow-sm group-hover:bg-error group-hover:text-white 
@@ -193,7 +216,6 @@ const DashBoardLayout = () => {
                   <FaSignOutAlt className="text-lg" />
                 </div>
 
-                {/* টেক্সট */}
                 <div className="text-left">
                   <p className="text-xs font-black text-base-content group-hover:text-error transition-colors">
                     Sign Out
@@ -204,7 +226,6 @@ const DashBoardLayout = () => {
                 </div>
               </div>
 
-              {/* একটি ছোট অ্যারো যা হোভারে দেখা যাবে */}
               <div className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
                 <svg
                   className="w-4 h-4 text-error"

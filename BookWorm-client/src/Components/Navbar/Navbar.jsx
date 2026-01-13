@@ -9,15 +9,32 @@ import {
 } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import Loading from '../Loading/Loading';
 
 const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const axiosSecure = useAxiosSecure();
 
-  // Admin Check
-  const isAdmin = user?.email === 'maha609im@gmail.com';
+  // ১. ডাটাবেজ থেকে ইউজারের লেটেস্ট তথ্য আনা
+  // queryKey ['dbUser', user?.email] প্রোফাইল পেজের সাথে মিল থাকায় এক জায়গায় আপডেট হলে সব জায়গায় হবে
+  const { data: dbUser = {}, isLoading } = useQuery({
+    queryKey: ['dbUser', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return {};
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  // Admin Check: ডাটাবেজ রোল অথবা সুপার অ্যাডমিন ইমেইল (নিরাপদ উপায়)
+  const isAdmin =
+    dbUser?.role === 'admin' || user?.email === 'maha609im@gmail.com';
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -44,7 +61,7 @@ const Navbar = () => {
         setOpen(false);
         toast.success('Logout successfully');
       })
-      .catch(error => console.log('Logout Error:', error));
+      .catch(error => console.error('Logout Error:', error));
   };
 
   const navLinks = [
@@ -54,15 +71,17 @@ const Navbar = () => {
     { name: 'Tutorials', path: '/tutorials' },
   ];
 
+  if (isLoading) return <Loading />;
+
   return (
     <div className="navbar bg-base-100/95 backdrop-blur-md shadow-sm border-b border-base-300 py-3 px-4 md:px-10 fixed top-0 left-0 right-0 z-[100] transition-all duration-300">
       <div className="navbar-start">
         {/* Mobile Menu */}
         <div className="dropdown lg:hidden">
-          <label tabIndex={0} className="btn btn-ghost btn-circle">
+          <label tabIndex={0} className="btn btn-ghost btn-circle text-primary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-primary"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -149,7 +168,11 @@ const Navbar = () => {
             >
               <div className="w-10 rounded-full bg-base-300 overflow-hidden">
                 <img
-                  src={user?.photoURL || 'https://i.ibb.co/mR4tYpX/user.png'}
+                  src={
+                    dbUser?.photoURL ||
+                    user?.photoURL ||
+                    'https://i.pinimg.com/736x/a2/21/0b/a2210be814fed675ce5cf9bf3b7141e0.jpg'
+                  }
                   alt="Avatar"
                 />
               </div>
@@ -160,9 +183,8 @@ const Navbar = () => {
                 <li className="p-4 border-b border-base-300 mb-2 bg-base-200/50 rounded-t-xl">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-black truncate text-base-content">
-                      {user?.displayName || 'Anonymous'}
+                      {dbUser?.displayName || user?.displayName || 'Anonymous'}
                     </p>
-                    {/* Admin Badge/Icon beside Name */}
                     {isAdmin && (
                       <div
                         className="tooltip tooltip-right"
@@ -172,15 +194,11 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <p className="text-[10px] text-base-content/60 truncate italic">
-                      {user?.email}
-                    </p>
-                  </div>
+                  <p className="text-[10px] text-base-content/60 truncate italic">
+                    {user?.email}
+                  </p>
                 </li>
 
-                {/* Conditional Admin Panel Route */}
                 {isAdmin && (
                   <li>
                     <Link
