@@ -1,16 +1,50 @@
-import React, { useState } from 'react';
-import { FaBook, FaCheckCircle, FaFire, FaChartLine } from 'react-icons/fa';
+import React, { useContext, useState } from 'react';
+import { FaBook, FaFire, FaChartLine } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { AuthContext } from '../../../context/AuthContext';
 import LibraryGrid from '../../../Components/LibraryGrid/LibraryGrid';
+import Loading from '../../../Components/Loading/Loading';
 
 const MyLibrary = () => {
-  const [activeTab, setActiveTab] = useState('current');
+  // ১. activeTab এখন 'reading' হবে (আপনার ডাটাবেস ভ্যালু অনুযায়ী)
+  const [activeTab, setActiveTab] = useState('reading');
+  const axiosSecure = useAxiosSecure();
+  const { user } = useContext(AuthContext);
 
-  // Stats Data
+  // ২. ডাটা ফেচিং এবং ফরম্যাটিং
+  const { data: libraryData = [], isLoading } = useQuery({
+    queryKey: ['myLibrary', user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/my-library/${user?.email}`);
+
+      // ব্যাকএন্ড থেকে আসা shelfType সরাসরি ব্যবহার করছি
+      const formattedData = res.data.map(book => ({
+        ...book,
+        shelf: book.shelfType, // "read", "reading", or "want"
+        title: book.bookTitle,
+      }));
+
+      return formattedData;
+    },
+  });
+
+  // ৩. স্ট্যাটস ক্যালকুলেশন
+  const totalBooks = libraryData.length;
+  const totalPagesRead = libraryData.reduce(
+    (sum, book) => sum + (book.progress || 0),
+    0
+  );
+  const finishedBooks = libraryData.filter(
+    book => book.shelf === 'read'
+  ).length;
+
   const stats = [
     {
       id: 1,
       label: 'Total Books',
-      value: '24',
+      value: totalBooks,
       icon: <FaBook />,
       color: 'text-primary',
       bg: 'bg-primary/10',
@@ -18,23 +52,28 @@ const MyLibrary = () => {
     {
       id: 2,
       label: 'Pages Read',
-      value: '1,240',
+      value: totalPagesRead.toLocaleString(),
       icon: <FaChartLine />,
       color: 'text-success',
       bg: 'bg-success/10',
     },
     {
       id: 3,
-      label: 'Daily Streak',
-      value: '12 Days',
+      label: 'Completed',
+      value: `${finishedBooks} Books`,
       icon: <FaFire />,
       color: 'text-warning',
       bg: 'bg-warning/10',
     },
   ];
 
+  // ৪. ফিল্টারিং লজিক (activeTab এবং shelf সরাসরি ম্যাচ করবে)
+  const filteredBooks = libraryData.filter(book => book.shelf === activeTab);
+
+  if (isLoading) return <Loading />;
+
   return (
-    <div className="conCls py-10 space-y-12">
+    <div className="container mx-auto px-4 py-10 space-y-12 animate-in fade-in duration-500">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-base-200 pb-8">
         <div>
@@ -46,9 +85,9 @@ const MyLibrary = () => {
           </p>
         </div>
 
-        {/* Tab Switcher */}
+        {/* Tab Switcher: ভ্যালুগুলো এখন ডাটাবেসের shelfType এর সাথে হুবহু মিলবে */}
         <div className="inline-flex bg-base-200 p-1.5 rounded-2xl shadow-inner">
-          {['want', 'current', 'read'].map(tab => (
+          {['want', 'reading', 'read'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -60,7 +99,7 @@ const MyLibrary = () => {
             >
               {tab === 'want'
                 ? 'To Read'
-                : tab === 'current'
+                : tab === 'reading'
                 ? 'Reading'
                 : 'Finished'}
             </button>
@@ -68,7 +107,7 @@ const MyLibrary = () => {
         </div>
       </div>
 
-      {/* Stats Summary Cards */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map(stat => (
           <div
@@ -101,7 +140,7 @@ const MyLibrary = () => {
       <section>
         <div className="flex items-center gap-4 mb-8">
           <h2 className="text-xl font-serif font-bold text-base-content capitalize">
-            {activeTab === 'current'
+            {activeTab === 'reading'
               ? 'Currently Reading'
               : activeTab === 'want'
               ? 'Plan to Read'
@@ -110,8 +149,16 @@ const MyLibrary = () => {
           <div className="h-[1px] flex-1 bg-gradient-to-r from-base-300 to-transparent"></div>
         </div>
 
-        {/* পাসিং activeTab প্রপস to LibraryGrid */}
-        <LibraryGrid activeTab={activeTab} />
+        {/* ফিল্টার করা বইগুলো লাইব্রেরি গ্রিডে পাস করা হচ্ছে */}
+        {filteredBooks.length > 0 ? (
+          <LibraryGrid books={filteredBooks} activeTab={activeTab} />
+        ) : (
+          <div className="text-center py-20 bg-base-200/20 rounded-[3rem] border-2 border-dashed border-base-300">
+            <p className="text-base-content/40 italic font-bold">
+              Your "{activeTab}" shelf is empty.
+            </p>
+          </div>
+        )}
       </section>
     </div>
   );
