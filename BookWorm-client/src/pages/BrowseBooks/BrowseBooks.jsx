@@ -1,154 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import {
-  FaSearch,
-  FaFilter,
-  FaStar,
-  FaChevronLeft,
-  FaChevronRight,
-  FaPlusCircle,
-  FaInfoCircle,
-  FaSortAmountDown,
-} from 'react-icons/fa';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Search,
+  Filter,
+  Star,
+  ChevronLeft,
+  ChevronRight,
+  PlusCircle,
+  Info,
+  X,
+  BookOpen,
+} from 'lucide-react';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import Loading from '../../Components/Loading/Loading';
+
 const BrowseBooks = () => {
-  const allBooks = [
-    {
-      id: 1,
-      title: 'Dune: Part Two',
-      author: 'Frank Herbert',
-      genre: 'Sci-Fi',
-      rating: 4.5,
-      cover:
-        'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 2,
-      title: 'Atomic Habits',
-      author: 'James Clear',
-      genre: 'Self-Help',
-      rating: 5,
-      cover:
-        'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 3,
-      title: 'Project Hail Mary',
-      author: 'Andy Weir',
-      genre: 'Sci-Fi',
-      rating: 4.9,
-      cover:
-        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 4,
-      title: 'The Midnight Library',
-      author: 'Matt Haig',
-      genre: 'Fantasy',
-      rating: 4.2,
-      cover:
-        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 5,
-      title: 'Deep Work',
-      author: 'Cal Newport',
-      genre: 'Self-Help',
-      rating: 4.8,
-      cover:
-        'https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 6,
-      title: 'The Alchemist',
-      author: 'Paulo Coelho',
-      genre: 'Fiction',
-      rating: 4.9,
-      cover:
-        'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 7,
-      title: 'Think and Grow Rich',
-      author: 'Napoleon Hill',
-      genre: 'Self-Help',
-      rating: 4.4,
-      cover:
-        'https://images.unsplash.com/photo-1592492159418-39f319320569?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 8,
-      title: 'Psychology of Money',
-      author: 'Morgan Housel',
-      genre: 'Self-Help',
-      rating: 4.7,
-      cover:
-        'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 9,
-      title: 'The Great Gatsby',
-      author: 'F. Scott Fitzgerald',
-      genre: 'Fiction',
-      rating: 4.1,
-      cover:
-        'https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 10,
-      title: 'Sapiens',
-      author: 'Yuval Noah Harari',
-      genre: 'History',
-      rating: 4.8,
-      cover:
-        'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 11,
-      title: 'Brave New World',
-      author: 'Aldous Huxley',
-      genre: 'Sci-Fi',
-      rating: 4.3,
-      cover:
-        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 12,
-      title: 'The 5 AM Club',
-      author: 'Robin Sharma',
-      genre: 'Self-Help',
-      rating: 4.0,
-      cover:
-        'https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 13,
-      title: 'The Silent Patient',
-      author: 'Alex Michaelides',
-      genre: 'Thriller',
-      rating: 4.6,
-      cover:
-        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 14,
-      title: 'Ikigai',
-      author: 'Hector Garcia',
-      genre: 'Self-Help',
-      rating: 4.5,
-      cover:
-        'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      id: 15,
-      title: 'The Hobbit',
-      author: 'J.R.R. Tolkien',
-      genre: 'Fantasy',
-      rating: 4.9,
-      cover:
-        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400',
-    },
-  ];
+  const axiosSecure = useAxiosSecure();
+
+  // --- States ---
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState('Default');
+  const booksPerPage = 6;
 
   const genres = [
     'Sci-Fi',
@@ -157,219 +34,310 @@ const BrowseBooks = () => {
     'Self-Help',
     'History',
     'Fiction',
+    'Thriller',
   ];
 
-  // --- States ---
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 6; // আপনার রিকোয়ারমেন্ট অনুযায়ী
-
-  // --- Logic: Filtering ---
-  const filteredBooks = allBooks.filter(book => {
-    const matchesSearch =
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGenre =
-      selectedGenres.length === 0 || selectedGenres.includes(book.genre);
-    return matchesSearch && matchesGenre;
+  // ১. ডাটা ফেচিং সেকশন
+  const { data: allBooks = [], isLoading } = useQuery({
+    queryKey: ['browseBooks'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/books');
+      console.log('API Data:', res.data);
+      return Array.isArray(res.data) ? res.data : [];
+    },
   });
 
-  // --- Logic: Pagination Calculations ---
-  const indexOfLastBook = currentPage * booksPerPage;
-  const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
-  const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+  const filteredBooks = (Array.isArray(allBooks) ? allBooks : [])
+    .filter(book => {
+      const matchesSearch =
+        book?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book?.author?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesGenre =
+        selectedGenres.length === 0 || selectedGenres.includes(book?.genre);
+      return matchesSearch && matchesGenre;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'rating') return b.rating - a.rating;
+      return 0;
+    });
 
-  // পেজ চেঞ্জ হলে টপে যাওয়ার জন্য
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentPage]);
+  // --- Pagination Calculations ---
+  const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+  const currentBooks = filteredBooks.slice(
+    (currentPage - 1) * booksPerPage,
+    currentPage * booksPerPage
+  );
 
   const toggleGenre = genre => {
     setSelectedGenres(prev =>
       prev.includes(genre) ? prev.filter(g => g !== genre) : [...prev, genre]
     );
-    setCurrentPage(1); // ফিল্টার করলে প্রথম পেজে ফেরত যাবে
+    setCurrentPage(1);
   };
 
-  return (
-    <div className="conCls py-10 space-y-10 min-h-screen">
-      {/* --- হেডার সেকশন --- */}
-      <div className="flex flex-col gap-6">
-        {/* --- হেডার সেকশন --- */}
-        <div className="flex flex-col gap-2">
-          {' '}
-          {/* গ্যাপ কিছুটা কমানো হয়েছে সুন্দর দেখানোর জন্য */}
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-base-content">
-            Explore <span className="text-primary italic">Collection</span>
-          </h1>
-          <p className="text-base-content/60 text-lg font-medium italic max-w-2xl">
-            Dive into our vast universe of stories, from mind-bending sci-fi to
-            life-changing habits. Your next great adventure is just a shelf
-            away.
-          </p>
-        </div>
+  if (isLoading) return <Loading />;
 
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="relative flex-1 group">
-            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/30 group-focus-within:text-primary transition-colors" />
-            <input
-              type="text"
-              placeholder="Search by title or author..."
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-base-100 border border-base-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary shadow-sm transition-all"
-              onChange={e => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-            />
-          </div>
-          <div className="flex gap-3">
-            <select
-              className="select select-bordered rounded-2xl bg-base-100 border-base-200 focus:ring-2 focus:ring-primary/20 h-14.5 min-w-37.5"
-              defaultValue="Sort By" // এখানে defaultValue ব্যবহার করুন
+  return (
+    <section className="min-h-screen py-24 px-6 md:px-12 lg:px-20 bg-base-100 relative overflow-hidden transition-colors duration-300">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-10 w-64 h-64 bg-primary/5 blur-[120px] rounded-full -z-10"></div>
+
+      {/* --- Header --- */}
+      <div className="relative z-10 mb-16 text-center lg:text-left animate-fadeIn">
+        <h1 className="text-4xl md:text-6xl font-black mb-4 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tighter">
+          Explore <span className="italic font-serif">Collection</span>
+        </h1>
+        <p className="text-base-content/60 text-lg max-w-2xl font-medium italic">
+          Dive into our vast universe of stories. Your next great adventure is
+          just a shelf away.
+        </p>
+      </div>
+
+      {/* --- Search & Filter Bar --- */}
+      <div className="flex flex-col lg:flex-row gap-6 mb-12 relative z-10">
+        <div className="relative flex-1 group">
+          <Search
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-base-content/30 group-focus-within:text-primary transition-colors"
+            size={20}
+          />
+          <input
+            type="text"
+            placeholder="Search by title or author..."
+            className="w-full pl-14 pr-12 py-5 bg-base-200 border border-base-300 rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all font-medium text-base-content shadow-sm"
+            value={searchTerm}
+            onChange={e => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute right-5 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-primary"
             >
-              <option disabled>Sort By</option>
-              <option value="rating">Highest Rating</option>
-              <option value="shelved">Most Shelved</option>
-            </select>
+              <X size={18} />
+            </button>
+          )}
+        </div>
+        <div className="flex gap-4">
+          <div className="dropdown dropdown-bottom md:dropdown-end group">
+            {/* Dropdown Button */}
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn h-14 md:h-16 px-8 rounded-4xl bg-base-200 border-none hover:bg-base-300 transition-all flex items-center gap-3 shadow-sm group-active:scale-95"
+            >
+              <div className="flex flex-col items-start">
+                <span className="text-[9px] uppercase tracking-[0.2em] text-base-content/40 font-black leading-none mb-1">
+                  Sort Results
+                </span>
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                  {sortBy === 'rating' ? 'Highest Rating' : 'Default Sort'}
+                </span>
+              </div>
+              <ChevronLeft
+                size={16}
+                className="-rotate-90 text-base-content/30 group-hover:translate-y-0.5 transition-transform"
+              />
+            </div>
+
+            {/* Dropdown Menu */}
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-20 menu p-3 shadow-2xl bg-base-100 rounded-4xl w-64 mt-3 border border-base-200 backdrop-blur-xl animate-fadeIn"
+            >
+              <li className="menu-title text-[10px] uppercase tracking-widest font-black text-base-content/30 pb-3 px-4">
+                Choose Priority
+              </li>
+
+              {/* Option: Default */}
+              <li>
+                <button
+                  onClick={() => {
+                    setSortBy('Default');
+                    document.activeElement.blur(); // অটোমেটিক ড্রপডাউন বন্ধ করবে
+                  }}
+                  className={`py-4 px-5 rounded-2xl flex justify-between items-center transition-all ${
+                    sortBy === 'Default'
+                      ? 'bg-primary/10 text-primary font-black'
+                      : 'hover:bg-base-200 font-bold text-base-content/60'
+                  }`}
+                >
+                  Default Order
+                  {sortBy === 'Default' && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                  )}
+                </button>
+              </li>
+
+              {/* Option: Rating */}
+              <li>
+                <button
+                  onClick={() => {
+                    setSortBy('rating');
+                    document.activeElement.blur();
+                  }}
+                  className={`py-4 px-5 rounded-2xl flex justify-between items-center transition-all ${
+                    sortBy === 'rating'
+                      ? 'bg-primary/10 text-primary font-black'
+                      : 'hover:bg-base-200 font-bold text-base-content/60'
+                  }`}
+                >
+                  Highest Rating
+                  <Star
+                    size={14}
+                    className={sortBy === 'rating' ? 'fill-primary' : ''}
+                  />
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-        {/* --- ফিল্টার সাইডবার --- */}
-        <aside className="space-y-8 lg:sticky lg:top-24 h-fit">
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-widest text-base-content/40 mb-4 flex items-center gap-2">
-              <FaFilter className="text-xs" /> Filter by Genre
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        {/* --- Sidebar: Genres --- */}
+        <aside className="lg:sticky lg:top-24 h-fit space-y-6">
+          <div className="p-6 bg-base-200/50 rounded-[2.5rem] border border-base-200 shadow-inner">
+            <h3 className="text-xs font-black uppercase tracking-widest text-base-content/40 mb-6 flex items-center gap-2">
+              <Filter size={14} /> Filter by Genre
             </h3>
             <div className="flex flex-wrap lg:flex-col gap-2">
               {genres.map(genre => (
                 <button
                   key={genre}
                   onClick={() => toggleGenre(genre)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border text-left flex justify-between items-center ${
+                  className={`px-5 py-3 rounded-2xl text-xs font-bold transition-all border flex justify-between items-center ${
                     selectedGenres.includes(genre)
-                      ? 'bg-primary text-white border-primary shadow-md shadow-primary/20'
-                      : 'bg-base-100 border-base-200 hover:border-primary/50'
+                      ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
+                      : 'bg-base-100 border-base-300 hover:border-primary/50 text-base-content/70'
                   }`}
                 >
                   {genre}
-                  {selectedGenres.includes(genre) && (
-                    <span className="ml-2 text-[10px]">✕</span>
-                  )}
+                  {selectedGenres.includes(genre) && <X size={12} />}
                 </button>
               ))}
             </div>
           </div>
         </aside>
 
-        {/* --- বুক গ্রিড (৬টি বই প্রতি পেজে) --- */}
-        <div className="lg:col-span-3 space-y-10">
-          {currentBooks.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 animate-fadeIn">
-              {currentBooks.map(book => (
-                <div
-                  key={book.id}
-                  className="group bg-base-100 rounded-[2.5rem] border border-base-200 p-4 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 flex flex-col"
-                >
-                  <div className="relative aspect-3/4 rounded-4xl overflow-hidden mb-5">
-                    <img
-                      src={book.cover}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      alt={book.title}
-                    />
-                    <div className="absolute top-3 right-3  backdrop-blur-2xl px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
-                      <FaStar className="text-yellow-500 text-[10px]" />
-                      <span className="text-[10px] font-bold">
-                        {book.rating}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="px-2 pb-2 flex-1 flex flex-col">
-                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">
-                      {book.genre}
-                    </p>
-                    <h3 className="text-lg font-serif font-bold text-base-content leading-tight line-clamp-1">
-                      {book.title}
-                    </h3>
-                    <p className="text-xs text-base-content/50 font-medium mb-4 italic">
-                      by {book.author}
-                    </p>
-
-                    <div className="flex gap-2 mt-auto">
-                      <button className="flex-1 bg-primary text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary-focus transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
-                        <FaPlusCircle /> Add Shelf
-                      </button>
-                      <Link
-                        to="/book-details/2"
-                        className="p-3 bg-base-200 text-base-content/70 rounded-xl hover:bg-primary hover:text-white transition-all"
-                      >
-                        <FaInfoCircle size={14} />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="py-20 text-center bg-base-200/30 rounded-[3rem] border-2 border-dashed border-base-300">
-              <p className="text-base-content/40 font-bold italic">
-                No books found matching your criteria.
-              </p>
-            </div>
-          )}
-
-          {/* --- ৪. Pagination (Logic Updated) --- */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-4 border-t border-base-200 pt-10">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`p-4 rounded-xl border border-base-300 transition-all ${
-                  currentPage === 1
-                    ? 'opacity-30 cursor-not-allowed'
-                    : 'hover:bg-primary hover:text-white'
-                }`}
+        {/* --- Book Grid --- */}
+        <div className="lg:col-span-3">
+          <AnimatePresence mode="popLayout">
+            {currentBooks.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-20 bg-base-200 rounded-[3rem] border-2 border-dashed border-base-300"
               >
-                <FaChevronLeft />
+                <BookOpen
+                  className="mx-auto text-base-content/20 mb-4"
+                  size={48}
+                />
+                <p className="text-base-content/40 font-bold italic">
+                  No books found matching your criteria.
+                </p>
+              </motion.div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                {currentBooks.map(book => (
+                  <motion.div
+                    layout
+                    key={book._id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                    className="group bg-base-100 border border-base-300 rounded-[2.5rem] p-4 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 flex flex-col h-full"
+                  >
+                    {/* Cover Section */}
+                    <div className="relative aspect-3/4 rounded-4xl overflow-hidden mb-6 shadow-lg bg-base-200">
+                      <img
+                        src={book.cover}
+                        alt={book.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-xl flex items-center gap-1 shadow-sm">
+                        <Star
+                          className="text-yellow-500 fill-yellow-500"
+                          size={12}
+                        />
+                        <span className="text-xs font-black text-black">
+                          {book.rating}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Info Section */}
+                    <div className="px-2 flex-1 flex flex-col">
+                      <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">
+                        {book.genre}
+                      </span>
+                      <h3 className="text-xl font-bold text-base-content mb-1 line-clamp-1 group-hover:text-primary transition-colors italic">
+                        {book.title}
+                      </h3>
+                      <p className="text-sm text-base-content/50 mb-6 font-medium italic">
+                        by {book.author}
+                      </p>
+
+                      {/* Actions */}
+                      <div className="flex gap-3 mt-auto">
+                        <button className="flex-1 bg-primary text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                          <PlusCircle size={16} /> Add Shelf
+                        </button>
+                        <Link
+                          to={`/book-details/${book._id}`}
+                          className="p-4 bg-base-200 text-base-content/70 rounded-2xl hover:bg-base-content hover:text-base-100 transition-all"
+                        >
+                          <Info size={18} />
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* --- Pagination --- */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-3 mt-16 border-t border-base-200 pt-10">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-4 rounded-2xl border border-base-300 disabled:opacity-20 hover:bg-primary hover:text-white transition-all cursor-pointer"
+              >
+                <ChevronLeft size={20} />
               </button>
 
               <div className="flex gap-2">
-                {[...Array(totalPages)].map((_, index) => (
+                {[...Array(totalPages)].map((_, i) => (
                   <button
-                    key={index}
-                    onClick={() => setCurrentPage(index + 1)}
-                    className={`w-10 h-10 rounded-xl font-bold transition-all ${
-                      currentPage === index + 1
-                        ? 'bg-primary text-white shadow-lg'
-                        : 'hover:bg-base-200'
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`w-12 h-12 rounded-2xl font-black transition-all cursor-pointer ${
+                      currentPage === i + 1
+                        ? 'bg-primary text-white shadow-xl scale-110'
+                        : 'bg-base-200 hover:bg-base-300 text-base-content/70'
                     }`}
                   >
-                    {index + 1}
+                    {i + 1}
                   </button>
                 ))}
               </div>
 
               <button
-                onClick={() =>
-                  setCurrentPage(prev => Math.min(prev + 1, totalPages))
-                }
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className={`p-4 rounded-xl border border-base-300 transition-all ${
-                  currentPage === totalPages
-                    ? 'opacity-30 cursor-not-allowed'
-                    : 'hover:bg-primary hover:text-white'
-                }`}
+                className="p-4 rounded-2xl border border-base-300 disabled:opacity-20 hover:bg-primary hover:text-white transition-all cursor-pointer"
               >
-                <FaChevronRight />
+                <ChevronRight size={20} />
               </button>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
