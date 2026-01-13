@@ -1,177 +1,129 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
 import {
   HiPlus,
   HiTrash,
   HiPlay,
-  HiVideoCamera,
   HiLink,
   HiBookmark,
   HiSparkles,
   HiChevronRight,
 } from 'react-icons/hi2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Loading from '../../../Components/Loading/Loading';
 
 const ManageTutorials = () => {
-  // ... (State and Functions remain the same)
-  const [tutorials, setTutorials] = useState([
-    {
-      title: 'How to Build a Reading Habit',
-      channel: 'BookWorm Guides',
-      thumbnail:
-        'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?q=80&w=500',
-      duration: '10:20',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Top 10 Sci-Fi Books of 2026',
-      channel: 'Sci-Fi Central',
-      thumbnail:
-        'https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=500',
-      duration: '15:45',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'How to Write Better Book Reviews',
-      channel: 'Writing Pro',
-      thumbnail:
-        'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=500',
-      duration: '08:12',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Mindfulness and Deep Reading',
-      channel: 'Calm Mind',
-      thumbnail:
-        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=500',
-      duration: '12:30',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Organizing Your Digital Library',
-      channel: 'Tech Librarian',
-      thumbnail:
-        'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=500',
-      duration: '09:55',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Speed Reading Techniques',
-      channel: 'Fast Learner',
-      thumbnail:
-        'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=500',
-      duration: '20:10',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'The History of Literature',
-      channel: 'History Hub',
-      thumbnail:
-        'https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=500',
-      duration: '25:00',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Self-Help Books That Actually Work',
-      channel: 'Improve Daily',
-      thumbnail:
-        'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600',
-      duration: '14:20',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Mystery Genre Masterclass',
-      channel: 'Author Insights',
-      thumbnail:
-        'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=500',
-      duration: '18:40',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Why We Read Fiction',
-      channel: 'Story Soul',
-      thumbnail:
-        'https://images.unsplash.com/photo-1474932430478-367dbb6832c1?q=80&w=500',
-      duration: '11:15',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Modern Poetry Appreciation',
-      channel: 'Poets Corner',
-      thumbnail:
-        'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=500',
-      duration: '07:45',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Creating Your Reading Nook',
-      channel: 'Cozy Living',
-      thumbnail:
-        'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=500',
-      duration: '13:00',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Classic Novels You Must Read',
-      channel: 'Literary Gems',
-      thumbnail:
-        'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500',
-      duration: '16:25',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'How to Read Difficult Books',
-      channel: 'Intellect Path',
-      thumbnail:
-        'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=500',
-      duration: '19:50',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-    {
-      title: 'Understanding Narrative Structure',
-      channel: 'Storycraft',
-      thumbnail:
-        'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=500',
-      duration: '22:10',
-      link: 'https://www.youtube.com/embed/P6FORpg0KVo',
-    },
-  ]);
-
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
   const [newVideo, setNewVideo] = useState({
     title: '',
     link: '',
     category: 'Tips',
+    channel: '',
+  });
+
+  // ১. ডাটা ফেচিং
+  const { data: tutorials = [], isLoading } = useQuery({
+    queryKey: ['tutorials-admin'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/tutorials');
+      return res.data;
+    },
+  });
+
+  // ২. ভিডিও অ্যাড করার মিউটেশন
+  const addMutation = useMutation({
+    mutationFn: async videoData => {
+      const res = await axiosSecure.post('/tutorials', videoData);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tutorials-admin']);
+      Swal.fire('Success', 'Video published successfully!', 'success');
+      setNewVideo({ title: '', link: '', category: 'Tips', channel: '' });
+    },
+    onError: error => {
+      Swal.fire(
+        'Error',
+        error.response?.data?.message || 'Failed to add video',
+        'error'
+      );
+    },
+  });
+
+  // ৩. ভিডিও ডিলিট করার মিউটেশন
+  const deleteMutation = useMutation({
+    mutationFn: async id => {
+      const res = await axiosSecure.delete(`/tutorials/${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tutorials-admin']);
+      Swal.fire('Deleted!', 'Video has been removed.', 'success');
+    },
   });
 
   const handleAddVideo = e => {
     e.preventDefault();
-    if (newVideo.title && newVideo.link) {
-      setTutorials([
-        {
-          ...newVideo,
-          id: Date.now(),
-          thumbnail:
-            'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=500',
-          channel: 'Admin',
-        },
-        ...tutorials,
-      ]);
-      setNewVideo({ title: '', link: '', category: 'Tips' });
+    const url = newVideo.link;
+    let videoId = '';
+
+    // YouTube URL ID extraction
+    if (url.includes('v=')) {
+      videoId = url.split('v=')[1]?.split('&')[0];
+    } else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    } else if (url.includes('embed/')) {
+      videoId = url.split('embed/')[1]?.split('?')[0];
     }
+
+    if (!videoId) {
+      return Swal.fire('Error', 'Invalid YouTube URL!', 'error');
+    }
+
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+    addMutation.mutate({
+      title: newVideo.title,
+      link: embedUrl,
+      thumbnail: thumbnailUrl,
+      channel: newVideo.channel || 'Tech Librarian',
+      category: newVideo.category,
+      duration: '09:55', // Static or can be dynamic
+    });
   };
 
-  const deleteVideo = id => setTutorials(tutorials.filter(t => t.id !== id));
+  const deleteVideo = id => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(result => {
+      if (result.isConfirmed) {
+        deleteMutation.mutate(id);
+      }
+    });
+  };
 
   const openVideo = link => {
     const iframe = document.getElementById('modal-iframe');
-    const embedUrl = link.includes('watch?v=')
-      ? link.replace('watch?v=', 'embed/')
-      : link;
-    iframe.src = embedUrl;
-    document.getElementById('video_modal').showModal();
+    if (iframe) {
+      iframe.src = link;
+      document.getElementById('video_modal').showModal();
+    }
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="p-4 lg:p-10 bg-base-200/30 min-h-screen animate-in fade-in duration-700">
-      {/* --- Video Modal --- */}
+      {/* Video Modal */}
       <dialog
         id="video_modal"
         className="modal modal-bottom sm:modal-middle backdrop-blur-md z-[100]"
@@ -180,7 +132,7 @@ const ManageTutorials = () => {
           <form method="dialog">
             <button
               onClick={() => {
-                document.getElementById('modal-iframe').src = '';
+                document.getElementById('modal-iframe').src = 'about:blank';
               }}
               className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-[110] text-white bg-black/40 hover:bg-white/20"
             >
@@ -191,7 +143,7 @@ const ManageTutorials = () => {
             <iframe
               id="modal-iframe"
               className="w-full h-full"
-              src=""
+              src="about:blank"
               title="Video Player"
               allowFullScreen
             ></iframe>
@@ -200,7 +152,7 @@ const ManageTutorials = () => {
         <form method="dialog" className="modal-backdrop bg-black/70">
           <button
             onClick={() => {
-              document.getElementById('modal-iframe').src = '';
+              document.getElementById('modal-iframe').src = 'about:blank';
             }}
           >
             close
@@ -208,7 +160,7 @@ const ManageTutorials = () => {
         </form>
       </dialog>
 
-      {/* Header Section */}
+      {/* Header */}
       <div className="max-w-7xl mx-auto mb-10 border-b border-base-300 pb-8">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.2em] text-[10px]">
@@ -220,14 +172,13 @@ const ManageTutorials = () => {
         </div>
       </div>
 
-      {/* --- Main Content Grid --- */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* --- LEFT SIDE: Sticky Form (lg: স্ক্রিন থেকে স্টিকি হবে) --- */}
-        <div className="lg:col-span-4 lg:sticky lg:top-10 z-20 order-1 lg:order-1">
+        {/* LEFT SIDE: Sticky Form */}
+        <div className="lg:col-span-4 lg:sticky lg:top-10 z-20">
           <div className="bg-base-100 rounded-[2rem] border border-base-200 shadow-xl overflow-hidden">
             <div className="bg-primary px-6 py-4 border-b border-base-200 flex items-center justify-between">
-              <h3 className="text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-white  ">
-                <HiPlus className="text-white " /> Add Video
+              <h3 className="text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-white">
+                <HiPlus className="text-white" /> Add Video
               </h3>
               <HiSparkles className="text-white animate-pulse" />
             </div>
@@ -251,13 +202,28 @@ const ManageTutorials = () => {
 
               <div className="space-y-1.5">
                 <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1">
+                  Channel Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Tech Librarian"
+                  className="input input-sm w-full h-11 bg-base-200/50 border-none rounded-xl focus:ring-2 ring-primary/20 font-bold text-xs"
+                  value={newVideo.channel}
+                  onChange={e =>
+                    setNewVideo({ ...newVideo, channel: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[9px] uppercase font-bold text-base-content/40 ml-1">
                   YouTube URL
                 </label>
                 <div className="relative">
                   <HiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-primary opacity-40" />
                   <input
                     type="url"
-                    placeholder="https://youtube.com/..."
+                    placeholder="https://youtube.com/watch?v=..."
                     className="input input-sm w-full h-11 pl-10 bg-base-200/50 border-none rounded-xl focus:ring-2 ring-primary/20 font-bold text-xs"
                     value={newVideo.link}
                     onChange={e =>
@@ -292,32 +258,22 @@ const ManageTutorials = () => {
                 </div>
               </div>
 
-              <button className="btn btn-primary w-full h-12 rounded-xl border-none shadow-lg shadow-primary/20 group relative overflow-hidden mt-2">
+              <button
+                type="submit"
+                disabled={addMutation.isPending}
+                className="btn btn-primary w-full h-12 rounded-xl border-none shadow-lg shadow-primary/20 group relative overflow-hidden mt-2"
+              >
                 <span className="relative z-10 flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-[10px]">
-                  Publish Now{' '}
+                  {addMutation.isPending ? 'Publishing...' : 'Publish Now'}
                   <HiChevronRight className="group-hover:translate-x-1 transition-transform" />
                 </span>
-                <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               </button>
             </form>
           </div>
-
-          {/* Pro Tip Card */}
-          <div className="mt-4 p-4 bg-primary/5 rounded-2xl border border-primary/10 flex items-start gap-3 hidden lg:flex">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-primary flex-shrink-0 shadow-sm">
-              <HiVideoCamera size={16} />
-            </div>
-            <p className="text-[10px] text-base-content/60 leading-tight">
-              <span className="block font-bold text-primary uppercase">
-                Pro Tip
-              </span>{' '}
-              Use high-quality thumbnails for better user engagement.
-            </p>
-          </div>
         </div>
 
-        {/* --- RIGHT SIDE: Scrollable List (lg:col-span-8) --- */}
-        <div className="lg:col-span-8 space-y-6 order-2 lg:order-2">
+        {/* RIGHT SIDE: List */}
+        <div className="lg:col-span-8 space-y-6">
           <div className="flex items-center gap-4 px-2">
             <h3 className="font-serif text-2xl font-bold italic">
               Active Showcase
@@ -331,7 +287,7 @@ const ManageTutorials = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {tutorials.map(video => (
               <div
-                key={video.id}
+                key={video._id}
                 className="group bg-base-100 rounded-[2rem] border border-base-200 overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 relative"
               >
                 <div
@@ -349,7 +305,7 @@ const ManageTutorials = () => {
                     </div>
                   </div>
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="bg-white/95 backdrop-blur-sm text-primary text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
+                    <span className="bg-white/95 backdrop-blur-sm text-primary text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest">
                       {video.category || 'Tutorial'}
                     </span>
                   </div>
@@ -365,10 +321,8 @@ const ManageTutorials = () => {
                       {video.channel || 'Internal'}
                     </p>
                     <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        deleteVideo(video.id);
-                      }}
+                      onClick={() => deleteVideo(video._id)}
+                      disabled={deleteMutation.isPending}
                       className="w-8 h-8 rounded-xl bg-error/10 text-error flex items-center justify-center hover:bg-error hover:text-white transition-all"
                     >
                       <HiTrash size={14} />

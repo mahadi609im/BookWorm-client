@@ -216,7 +216,7 @@ const DashBoardLayout = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={3}
-                    d="9 5l7 7-7 7"
+                    d="M9 5l7 7-7 7"
                   />
                 </svg>
               </div>
