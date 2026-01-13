@@ -76,7 +76,7 @@ const BookDetails = () => {
           cover: book.cover,
           genre: book.genre,
           // আপনার ডাটাবেসে যদি pages বা totalPages যে নামেই থাকুক, এখানে ম্যাপ হবে
-          totalPages: parseInt(book.totalPages) || parseInt(book.pages) || 0,
+          totalPages: parseInt(book.totalPages) || 0,
           description: book.description,
         },
       });
