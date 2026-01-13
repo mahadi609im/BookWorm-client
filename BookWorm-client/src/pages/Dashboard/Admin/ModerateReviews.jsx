@@ -1,210 +1,93 @@
 import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'; // Added for functionality
+import Swal from 'sweetalert2'; // For better UX confirmation
+import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import {
   HiCheckCircle,
   HiTrash,
   HiStar,
-  HiOutlineClock,
   HiAdjustmentsHorizontal,
   HiChatBubbleLeftRight,
   HiShieldCheck,
-  HiMagnifyingGlass,
 } from 'react-icons/hi2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure'; // Your existing hook
+import Loading from '../../../Components/Loading/Loading'; // Your loading component
 
 const ModerateReviews = () => {
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // স্টেট ম্যানেজমেন্ট যাতে Approve/Delete কাজ করে
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      userName: 'Anisur Rahman', // User List matching
-      userImage: 'https://i.pravatar.cc/150?u=1',
-      bookTitle: 'The Great Gatsby',
-      rating: 5,
-      comment:
-        'A masterpiece of American literature. The themes of wealth and love are timeless. Highly recommended!',
-      date: '12 Jan 2026',
-      status: 'pending',
+  // --- ১. ডাটা ফেচিং (Backend থেকে সব রিভিউ আনা) ---
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ['admin-reviews', filterStatus],
+    queryFn: async () => {
+      // আপনি যদি ব্যাকএন্ডে কুয়েরি প্যারাম সাপোর্ট করেন তবে status পাঠানো ভালো
+      const res = await axiosSecure.get('/reviews/admin');
+      return res.data;
     },
-    {
-      id: 2,
-      userName: 'Sumaiya Akter',
-      userImage: 'https://i.pravatar.cc/150?u=2',
-      bookTitle: 'Circe',
-      rating: 4,
-      comment:
-        'Very practical advice for building long-term habits. Changed my perspective on daily routines.',
-      date: '10 Jan 2026',
-      status: 'pending',
+  });
+
+  // --- ২. এপ্রুভ করার মিউটেশন ---
+  const approveMutation = useMutation({
+    mutationFn: async id => {
+      const res = await axiosSecure.patch(`/reviews/approve/${id}`);
+      return res.data;
     },
-    {
-      id: 3,
-      userName: 'Rakib Hasan',
-      userImage: 'https://i.pravatar.cc/150?u=3',
-      bookTitle: 'The Alchemist',
-      rating: 3,
-      comment:
-        'Good story but felt a bit too idealistic at times. Still, a classic read for beginners.',
-      date: '08 Jan 2026',
-      status: 'pending',
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin-reviews']);
+      Swal.fire(
+        'Approved!',
+        'The review is now visible to everyone.',
+        'success'
+      );
     },
-    {
-      id: 4,
-      userName: 'Tanvir Ahmed',
-      userImage: 'https://i.pravatar.cc/150?u=4',
-      bookTitle: 'Sapiens',
-      rating: 5,
-      comment:
-        'Fascinating journey through human history. Makes you think differently about our species.',
-      date: '05 Jan 2026',
-      status: 'approved',
+  });
+
+  // --- ৩. ডিলিট করার মিউটেশন ---
+  const deleteMutation = useMutation({
+    mutationFn: async id => {
+      const res = await axiosSecure.delete(`/reviews/${id}`);
+      return res.data;
     },
-    {
-      id: 5,
-      userName: 'Nusrat Jahan',
-      userImage: 'https://i.pravatar.cc/150?u=5',
-      bookTitle: 'Milk and Honey',
-      rating: 5,
-      comment:
-        'Raw, emotional, and beautiful. Every poem speaks to the soul directly.',
-      date: '12 Jan 2026',
-      status: 'pending',
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin-reviews']);
+      Swal.fire('Deleted!', 'Review has been removed.', 'success');
     },
-    {
-      id: 6,
-      userName: 'Ariful Islam',
-      userImage: 'https://i.pravatar.cc/150?u=6',
-      bookTitle: 'Atomic Habits',
-      rating: 4,
-      comment:
-        'Small changes truly make a big difference. This book is a manual for life.',
-      date: '01 Jan 2026',
-      status: 'pending',
-    },
-    {
-      id: 7,
-      userName: 'Sajid Hossain',
-      userImage: 'https://i.pravatar.cc/150?u=7',
-      bookTitle: 'Verity',
-      rating: 4,
-      comment:
-        'The twist at the end left me speechless! A darker side of fiction that works well.',
-      date: '10 Jan 2026',
-      status: 'approved',
-    },
-    {
-      id: 8,
-      userName: 'Maliha Islam',
-      userImage: 'https://i.pravatar.cc/150?u=8',
-      bookTitle: 'Emma',
-      rating: 5,
-      comment:
-        'Jane Austen at her best. The character development of Emma is just brilliant.',
-      date: '12 Jan 2026',
-      status: 'pending',
-    },
-    {
-      id: 9,
-      userName: 'Zubayer Alom',
-      userImage: 'https://i.pravatar.cc/150?u=9',
-      bookTitle: 'Clean Code',
-      rating: 5,
-      comment:
-        'Essential reading for every developer. It changed the way I write functions.',
-      date: '11 Jan 2026',
-      status: 'pending',
-    },
-    {
-      id: 10,
-      userName: 'Farhana Yeasmin',
-      userImage: 'https://i.pravatar.cc/150?u=10',
-      bookTitle: 'The Starry Night',
-      rating: 4,
-      comment:
-        'A visual and narrative treat for art lovers. Beautifully put together.',
-      date: '22 Dec 2025',
-      status: 'approved',
-    },
-    {
-      id: 11,
-      userName: 'Kamrul Hassan',
-      userImage: 'https://i.pravatar.cc/150?u=11',
-      bookTitle: '1984',
-      rating: 5,
-      comment:
-        'Chillingly relevant. Orwell’s vision of the future is a powerful warning.',
-      date: '09 Jan 2026',
-      status: 'pending',
-    },
-    {
-      id: 12,
-      userName: 'Lutfun Nahar',
-      userImage: 'https://i.pravatar.cc/150?u=12',
-      bookTitle: 'Salt Fat Acid Heat',
-      rating: 4,
-      comment:
-        'Not just a cookbook, but a guide to understanding the science of cooking.',
-      date: '07 Jan 2026',
-      status: 'pending',
-    },
-    {
-      id: 13,
-      userName: 'Mahmudul Hasan',
-      userImage: 'https://i.pravatar.cc/150?u=13',
-      bookTitle: 'The Hobbit',
-      rating: 5,
-      comment:
-        'A grand adventure that feels cozy and epic at the same time. Love Bilbo!',
-      date: '12 Jan 2026',
-      status: 'approved',
-    },
-    {
-      id: 14,
-      userName: 'Sadia Afrin',
-      userImage: 'https://i.pravatar.cc/150?u=14',
-      bookTitle: 'Thinking Fast and Slow',
-      rating: 5,
-      comment:
-        'A deep dive into cognitive biases. It will make you question your own decisions.',
-      date: '12 Jan 2026',
-      status: 'pending',
-    },
-    {
-      id: 15,
-      userName: 'Tahsin Reza',
-      userImage: 'https://i.pravatar.cc/150?u=15',
-      bookTitle: 'Capital',
-      rating: 4,
-      comment:
-        'A heavy but important read for anyone interested in economics and politics.',
-      date: '10 Jan 2026',
-      status: 'pending',
-    },
-  ]);
+  });
 
   // Actions
   const handleApprove = id => {
-    setReviews(
-      reviews.map(r => (r.id === id ? { ...r, status: 'approved' } : r))
-    );
+    approveMutation.mutate(id);
   };
 
   const handleDelete = id => {
-    if (window.confirm('Delete this review?')) {
-      setReviews(reviews.filter(r => r.id !== id));
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(result => {
+      if (result.isConfirmed) {
+        deleteMutation.mutate(id);
+      }
+    });
   };
 
-  // Logic: Filter + Search
+  // Logic: Filter + Search (Frontend filtering on fetched data)
   const filteredReviews = reviews
     .filter(r => (filterStatus === 'all' ? true : r.status === filterStatus))
     .filter(
       r =>
-        r.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.bookTitle.toLowerCase().includes(searchQuery.toLowerCase())
+        r.userName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.bookTitle?.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="p-4 lg:p-10 space-y-8 bg-base-200/30 min-h-screen animate-in fade-in duration-700">
@@ -225,7 +108,6 @@ const ModerateReviews = () => {
           </p>
         </div>
 
-        {/* Header Stats & Filter Dropdown */}
         <div className="flex flex-row items-center gap-4 w-full xl:w-auto">
           <div className="bg-base-100 h-16 px-6 rounded-2xl border border-base-200 shadow-sm flex items-center gap-4 group flex-1 md:flex-none">
             <div className="w-9 h-9 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center text-lg shrink-0">
@@ -286,7 +168,7 @@ const ModerateReviews = () => {
         </div>
       </div>
 
-      {/* --- Search Section (নিচে রাখা হয়েছে) --- */}
+      {/* --- Search Section --- */}
       <div className="max-w-md mx-auto relative group">
         <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-base-content/30 group-focus-within:text-primary transition-colors z-10" />
         <input
@@ -304,15 +186,25 @@ const ModerateReviews = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredReviews.map(review => (
           <div
-            key={review.id}
+            key={review._id} // Changed to _id for MongoDB
             className="bg-base-100 rounded-3xl border border-base-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group overflow-hidden"
           >
-            {/* Top Section: User Info & Status */}
             <div className="p-6 pb-0 flex justify-between items-start">
               <div className="flex items-center gap-3">
                 <div className="avatar">
-                  <div className="w-10 h-10 rounded-full ring-2 ring-primary/10 ring-offset-2">
-                    <img src={review.userImage} alt={review.userName} />
+                  <div className="w-10 h-10 rounded-full ring-2 ring-primary/10 ring-offset-2 overflow-hidden bg-base-200 flex items-center justify-center">
+                    {review.userPhoto || review.userImage ? (
+                      <img
+                        src={review.userPhoto || review.userImage}
+                        alt={review.userName}
+                        onError={e => {
+                          e.target.src =
+                            'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                        }} // ইমেজ লোড না হলে ডিফল্ট ছবি
+                      />
+                    ) : (
+                      <FaUserCircle className="text-primary/40 text-2xl" />
+                    )}
                   </div>
                 </div>
                 <div>
@@ -320,7 +212,8 @@ const ModerateReviews = () => {
                     {review.userName}
                   </h4>
                   <span className="text-[10px] font-medium text-base-content/40">
-                    {review.date}
+                    {new Date(review.createdAt).toLocaleDateString()}{' '}
+                    {/* Formatting Date */}
                   </span>
                 </div>
               </div>
@@ -336,7 +229,6 @@ const ModerateReviews = () => {
               </span>
             </div>
 
-            {/* Middle Section: Book Title & Rating */}
             <div className="px-6 pt-5">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-[11px] font-bold text-primary uppercase tracking-wider">
@@ -354,7 +246,6 @@ const ModerateReviews = () => {
                 </div>
               </div>
 
-              {/* Clean Comment Area */}
               <div className="bg-base-200/30 rounded-2xl p-4 mt-2">
                 <p className="text-sm text-base-content/80 leading-relaxed italic">
                   "{review.comment}"
@@ -362,10 +253,10 @@ const ModerateReviews = () => {
               </div>
             </div>
 
-            {/* Bottom Section: Actions */}
             <div className="p-6 mt-auto flex items-center justify-between gap-3">
               <button
-                onClick={() => handleDelete(review.id)}
+                onClick={() => handleDelete(review._id)}
+                disabled={deleteMutation.isPending}
                 className="btn btn-ghost btn-sm h-10 w-10 p-0 rounded-xl text-base-content bg-error/10 hover:bg-error/20 hover:text-error transition-all"
                 title="Delete Review"
               >
@@ -374,7 +265,8 @@ const ModerateReviews = () => {
 
               {review.status === 'pending' && (
                 <button
-                  onClick={() => handleApprove(review.id)}
+                  onClick={() => handleApprove(review._id)}
+                  disabled={approveMutation.isPending}
                   className="btn btn-primary btn-sm px-5 h-10 rounded-xl normal-case font-bold text-xs shadow-md shadow-primary/20 gap-2"
                 >
                   Approve Review
@@ -385,7 +277,6 @@ const ModerateReviews = () => {
         ))}
       </div>
 
-      {/* --- Empty State --- */}
       {filteredReviews.length === 0 && (
         <div className="py-20 flex flex-col items-center justify-center text-center space-y-4">
           <div className="w-24 h-24 rounded-full bg-base-100 flex items-center justify-center shadow-inner border border-base-200">

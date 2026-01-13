@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
+import Loading from '../../../Components/Loading/Loading';
 import {
   FaPlus,
   FaSearch,
@@ -8,159 +12,83 @@ import {
   FaLayerGroup,
   FaTimes,
   FaExclamationTriangle,
-  FaInfoCircle,
 } from 'react-icons/fa';
 import { HiChevronDown } from 'react-icons/hi2';
 
 const ManageGenres = () => {
-  // ১. স্টেট ম্যানেজমেন্ট
-  const [genres, setGenres] = useState([
-    {
-      id: 'GEN-001',
-      name: 'Science Fiction',
-      count: 124,
-      status: 'Active',
-      color: 'primary',
-      description: 'Explore the stars and future technology.',
-    },
-    {
-      id: 'GEN-002',
-      name: 'Philosophy',
-      count: 86,
-      status: 'Active',
-      color: 'secondary',
-      description: 'Deep thoughts and existential questions.',
-    },
-    {
-      id: 'GEN-003',
-      name: 'Mystery & Thriller',
-      count: 52,
-      status: 'Archived',
-      color: 'accent',
-      description: 'Suspenseful and gripping tales.',
-    },
-    {
-      id: 'GEN-004',
-      name: 'Fantasy',
-      count: 210,
-      status: 'Active',
-      color: 'primary',
-      description: 'Magic, dragons, and epic quests.',
-    },
-    {
-      id: 'GEN-005',
-      name: 'Biography',
-      count: 45,
-      status: 'Active',
-      color: 'secondary',
-      description: 'Real stories of remarkable people.',
-    },
-    {
-      id: 'GEN-006',
-      name: 'History',
-      count: 73,
-      status: 'Active',
-      color: 'accent',
-      description: 'Understanding the past to shape the future.',
-    },
-    {
-      id: 'GEN-007',
-      name: 'Self-Help',
-      count: 115,
-      status: 'Active',
-      color: 'primary',
-      description: 'Improve your life and mental well-being.',
-    },
-    {
-      id: 'GEN-008',
-      name: 'Psychology',
-      count: 68,
-      status: 'Active',
-      color: 'secondary',
-      description: 'Insights into the human mind.',
-    },
-    {
-      id: 'GEN-009',
-      name: 'Poetry',
-      count: 30,
-      status: 'Archived',
-      color: 'accent',
-      description: 'Artistic expression through words.',
-    },
-    {
-      id: 'GEN-010',
-      name: 'Technical & Coding',
-      count: 95,
-      status: 'Active',
-      color: 'primary',
-      description: 'Guides for the modern developer.',
-    },
-    {
-      id: 'GEN-011',
-      name: 'Romance',
-      count: 150,
-      status: 'Active',
-      color: 'secondary',
-      description: 'Heartwarming stories of love.',
-    },
-    {
-      id: 'GEN-012',
-      name: 'Horror',
-      count: 42,
-      status: 'Active',
-      color: 'accent',
-      description: 'Dark and terrifying experiences.',
-    },
-    {
-      id: 'GEN-013',
-      name: 'Business',
-      count: 89,
-      status: 'Active',
-      color: 'primary',
-      description: 'Strategies for success in industry.',
-    },
-    {
-      id: 'GEN-014',
-      name: 'Manga',
-      count: 180,
-      status: 'Active',
-      color: 'secondary',
-      description: 'Japanese illustrated storytelling.',
-    },
-    {
-      id: 'GEN-015',
-      name: 'Graphic Novels',
-      count: 65,
-      status: 'Archived',
-      color: 'accent',
-      description: 'Visual-rich narrative books.',
-    },
-  ]);
-
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState({
-    id: '',
     name: '',
     status: 'Active',
-    count: 0,
+    description: '',
   });
 
-  // ২. ফিল্টারিং লজিক (Search + Filter)
-  const filteredGenres = genres.filter(genre => {
-    const matchesSearch =
-      genre.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      genre.id.toLowerCase().includes(searchTerm.toLowerCase());
+  // ১. ডেটা ফেচিং (TanStack Query)
+  const { data: genres = [], isLoading } = useQuery({
+    queryKey: ['genres'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/genres');
+      return res.data;
+    },
+  });
 
+  // ২. মিউটেশনস (Add, Update, Delete)
+  const addMutation = useMutation({
+    mutationFn: newGenre => axiosSecure.post('/genres', newGenre),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['genres']);
+      Swal.fire({
+        icon: 'success',
+        title: 'Genre Created!',
+        text: 'New category has been added to the library.',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      document.getElementById('genre_modal').close();
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: updatedGenre =>
+      axiosSecure.patch(`/genres/${updatedGenre._id}`, updatedGenre),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['genres']);
+      Swal.fire({
+        icon: 'success',
+        title: 'Changes Saved!',
+        text: 'Genre details have been updated.',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      document.getElementById('genre_modal').close();
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: id => axiosSecure.delete(`/genres/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['genres']);
+      Swal.fire('Deleted!', 'Genre has been removed.', 'success');
+      document.getElementById('delete_genre_modal').close();
+    },
+  });
+
+  // ৩. ফিল্টারিং লজিক
+  const filteredGenres = genres.filter(genre => {
+    const matchesSearch = genre.name
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesStatus =
       filterStatus === 'all' ||
-      genre.status.toLowerCase() === filterStatus.toLowerCase();
-
+      genre.status?.toLowerCase() === filterStatus.toLowerCase();
     return matchesSearch && matchesStatus;
   });
 
-  // ৩. হ্যান্ডেলার ফাংশনস
+  // ৪. হ্যান্ডেলার ফাংশনস
   const handleEditClick = genre => {
     setIsEditMode(true);
     setSelectedGenre(genre);
@@ -170,23 +98,32 @@ const ManageGenres = () => {
   const handleAddClick = () => {
     setIsEditMode(false);
     setSelectedGenre({
-      id: `GEN-0${genres.length + 1}`,
       name: '',
       status: 'Active',
-      count: 0,
+      description: '',
     });
     document.getElementById('genre_modal').showModal();
   };
 
-  const handleDeleteClick = genre => {
-    setSelectedGenre(genre);
-    document.getElementById('delete_genre_modal').showModal();
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (isEditMode) {
+      updateMutation.mutate(selectedGenre);
+    } else {
+      addMutation.mutate(selectedGenre);
+    }
   };
+
+  const confirmDelete = () => {
+    deleteMutation.mutate(selectedGenre._id);
+  };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="p-4 lg:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* --- Elegant Header --- */}
-      <div className="relative overflow-hidden bg-linear-to-br from-primary/10 via-base-100 to-secondary/10 p-8 lg:p-12 rounded-[3rem] border border-base-200 shadow-sm">
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 p-8 lg:p-12 rounded-[3rem] border border-base-200 shadow-sm">
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -199,8 +136,7 @@ const ManageGenres = () => {
               Manage <span className="text-primary italic">Genres</span>
             </h1>
             <p className="text-base-content/50 font-medium mt-2 max-w-md">
-              Define and organize the structural categories of your literary
-              world.
+              Organize books by defining clear and engaging categories.
             </p>
           </div>
           <button
@@ -218,12 +154,12 @@ const ManageGenres = () => {
       {/* --- Search & Filter Bar --- */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center px-2">
         <div className="lg:col-span-8 relative group">
-          <FaSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-base-content/20 group-focus-within:text-primary transition-colors" />
+          <FaSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-base-content/20 group-focus-within:text-primary transition-colors z-20" />
           <input
             type="text"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            placeholder="Search by genre name or ID code..."
+            placeholder="Search genres..."
             className="input w-full h-16 pl-14 rounded-3xl bg-base-100 border-base-200 focus:ring-4 focus:ring-primary/10 transition-all font-medium shadow-sm"
           />
         </div>
@@ -232,26 +168,20 @@ const ManageGenres = () => {
           <div className="dropdown dropdown-end w-full">
             <button
               tabIndex={0}
-              className="btn w-full h-16 px-6 rounded-3xl bg-base-100 border border-base-200 hover:bg-base-200 group flex items-center justify-between active:scale-95 transition-all shadow-sm"
+              className="btn w-full h-16 px-6 rounded-3xl bg-base-100 border border-base-200 hover:bg-base-200 group flex items-center justify-between transition-all shadow-sm"
             >
               <div className="flex items-center gap-3">
                 <FaFilter className="text-primary text-sm" />
                 <span className="uppercase tracking-widest text-[10px] font-bold">
-                  {filterStatus === 'all'
-                    ? 'All Status'
-                    : `${filterStatus} Only`}
+                  {filterStatus === 'all' ? 'All Status' : filterStatus}
                 </span>
               </div>
               <HiChevronDown className="text-base-content/30 group-hover:translate-y-0.5 transition-transform" />
             </button>
-
             <ul
               tabIndex={0}
               className="dropdown-content z-20 menu p-3 shadow-2xl bg-base-100 rounded-3xl w-full mt-2 border border-base-200 space-y-1"
             >
-              <li className="menu-title text-[9px] uppercase tracking-widest font-bold text-base-content/30 pb-2 px-4">
-                Select Status
-              </li>
               {['all', 'active', 'archived'].map(status => (
                 <li key={status}>
                   <button
@@ -261,14 +191,11 @@ const ManageGenres = () => {
                     }}
                     className={`capitalize font-bold text-xs rounded-xl py-3 px-4 flex justify-between items-center ${
                       filterStatus === status
-                        ? 'bg-primary text-white shadow-lg'
+                        ? 'bg-primary text-white'
                         : 'hover:bg-primary/10 hover:text-primary'
                     }`}
                   >
-                    {status === 'all' ? 'All Status' : status}
-                    {filterStatus === status && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-                    )}
+                    {status}
                   </button>
                 </li>
               ))}
@@ -278,7 +205,7 @@ const ManageGenres = () => {
       </div>
 
       {/* --- Table Section --- */}
-      <div className="bg-base-100 rounded-[2.5rem] border border-base-200 shadow-xl shadow-base-300/10 overflow-hidden">
+      <div className="bg-base-100 rounded-[2.5rem] border border-base-200 shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="table w-full border-separate border-spacing-y-3 px-6 min-w-[900px]">
             <thead>
@@ -292,57 +219,32 @@ const ManageGenres = () => {
             <tbody>
               {filteredGenres.map(genre => (
                 <tr
-                  key={genre.id}
+                  key={genre._id}
                   className="group transition-all hover:bg-base-200/50"
                 >
                   <td className="py-5 pl-10 rounded-l-[2rem]">
                     <div className="flex items-center gap-5">
-                      <div
-                        className={`w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-inner transition-transform group-hover:scale-110 ${
-                          genre.color === 'primary'
-                            ? 'bg-primary/10 text-primary'
-                            : genre.color === 'secondary'
-                            ? 'bg-secondary/10 text-secondary'
-                            : 'bg-accent/10 text-accent'
-                        }`}
-                      >
-                        <FaLayerGroup size={22} />
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+                        <FaLayerGroup size={20} />
                       </div>
                       <div className="min-w-0">
                         <div className="font-bold text-lg text-base-content leading-tight">
                           {genre.name}
                         </div>
-                        <div className="text-[10px] text-base-content/40 font-black tracking-widest uppercase mt-0.5">
-                          ID: {genre.id}
-                        </div>
-                        <p className="text-xs text-base-content/50 truncate w-48 mt-1 font-medium">
-                          {genre.description}
+                        <p className="text-xs text-base-content/50 truncate w-48 mt-1">
+                          {genre.description || 'No description provided.'}
                         </p>
                       </div>
                     </div>
                   </td>
-
                   <td className="py-5">
-                    <div className="flex flex-col">
-                      <div className="flex items-end gap-2 mb-1.5">
-                        <span className="font-black text-base text-base-content">
-                          {genre.count}
-                        </span>
-                        <span className="text-[10px] font-bold opacity-30 uppercase tracking-tighter mb-0.5">
-                          Books
-                        </span>
-                      </div>
-                      <progress
-                        className={`progress w-32 h-2 opacity-50 progress-${genre.color}`}
-                        value={(genre.count / 250) * 100}
-                        max="100"
-                      ></progress>
-                    </div>
+                    <span className="font-black text-base text-base-content">
+                      {genre.bookCount || 0} Books
+                    </span>
                   </td>
-
                   <td className="py-5">
                     <div
-                      className={`badge h-8 px-5 rounded-xl font-black text-[10px] uppercase tracking-widest border-none ${
+                      className={`badge h-7 px-4 rounded-lg font-bold text-[10px] uppercase tracking-widest border-none ${
                         genre.status === 'Active'
                           ? 'bg-success/10 text-success'
                           : 'bg-base-200 text-base-content/40'
@@ -351,20 +253,24 @@ const ManageGenres = () => {
                       {genre.status}
                     </div>
                   </td>
-
                   <td className="py-5 pr-10 text-right rounded-r-[2rem]">
-                    <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
+                    <div className="flex justify-end gap-2">
                       <button
                         onClick={() => handleEditClick(genre)}
-                        className="btn btn-square btn-ghost rounded-2xl hover:bg-primary/10 text-primary border border-transparent hover:border-primary/20 transition-all"
+                        className="btn btn-square btn-sm btn-ghost rounded-xl hover:bg-primary/10 text-primary"
                       >
-                        <FaEdit size={18} />
+                        <FaEdit size={16} />
                       </button>
                       <button
-                        onClick={() => handleDeleteClick(genre)}
-                        className="btn btn-square btn-ghost rounded-2xl text-error/40 hover:text-error hover:bg-error/10 border border-transparent hover:border-error/20 transition-all"
+                        onClick={() => {
+                          setSelectedGenre(genre);
+                          document
+                            .getElementById('delete_genre_modal')
+                            .showModal();
+                        }}
+                        className="btn btn-square btn-sm btn-ghost rounded-xl text-error/40 hover:text-error hover:bg-error/10"
                       >
-                        <FaTrashAlt size={16} />
+                        <FaTrashAlt size={14} />
                       </button>
                     </div>
                   </td>
@@ -372,83 +278,102 @@ const ManageGenres = () => {
               ))}
             </tbody>
           </table>
-
           {filteredGenres.length === 0 && (
-            <div className="py-20 text-center">
-              <div className="text-base-content/20 mb-4 flex justify-center">
-                <FaSearch size={48} />
-              </div>
-              <h3 className="text-xl font-bold text-base-content/40 italic">
-                No matching genres found...
-              </h3>
+            <div className="text-center py-20 opacity-30 font-bold uppercase tracking-widest">
+              No Genres Found
             </div>
           )}
         </div>
       </div>
 
       {/* --- DYNAMIC MODAL (ADD & EDIT) --- */}
-      <dialog id="genre_modal" className="modal backdrop-blur-md">
-        <div className="modal-box bg-base-100 rounded-[2.5rem] p-0 max-w-lg overflow-hidden border border-base-300 shadow-2xl">
+      <dialog
+        id="genre_modal"
+        className="modal modal-bottom sm:modal-middle backdrop-blur-sm"
+      >
+        <div className="modal-box bg-base-100 rounded-[2.5rem] p-0 max-w-lg overflow-hidden border border-base-300 shadow-2xl flex flex-col max-h-[90vh]">
+          {/* Header */}
           <div
-            className={`${
+            className={`p-8 text-white shrink-0 ${
               isEditMode ? 'bg-secondary' : 'bg-primary'
-            } p-8 text-white`}
+            }`}
           >
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-2xl font-bold font-serif tracking-tight">
+                <h3 className="text-2xl font-bold font-serif">
                   {isEditMode ? 'Update Genre' : 'Create Genre'}
                 </h3>
-                <p className="text-xs text-white/70 font-bold uppercase tracking-[3px] mt-1">
-                  {isEditMode
-                    ? `ID: ${selectedGenre.id}`
-                    : 'Add to library system'}
+                <p className="text-[10px] uppercase tracking-[3px] opacity-70 mt-1 font-bold">
+                  BookWorm Architecture
                 </p>
               </div>
+              {/* ক্লোজ করার জন্য মেথড ডায়ালগ নিশ্চিত করা হয়েছে */}
               <form method="dialog">
-                <button className="btn btn-circle btn-sm bg-white/20 border-none text-white hover:bg-white/40">
+                <button className="btn btn-circle btn-sm bg-white/20 border-none text-white hover:bg-white/40 transition-all">
                   <FaTimes />
                 </button>
               </form>
             </div>
           </div>
 
-          <form className="p-8 space-y-8" onSubmit={e => e.preventDefault()}>
-            <div className="space-y-6">
+          {/* Form Content */}
+          <form
+            className="flex flex-col overflow-hidden"
+            onSubmit={e => {
+              handleSubmit(e);
+              // সাবমিট হওয়ার পর পপআপ ক্লোজ করলে ব্লার চলে যাবে
+              document.getElementById('genre_modal').close();
+            }}
+          >
+            <div className="px-8 py-6 space-y-5 overflow-y-auto custom-scrollbar">
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-bold text-[11px] uppercase tracking-widest text-base-content/50">
+                  <span className="label-text font-semibold text-[11px] uppercase tracking-wider opacity-60">
                     Genre Name
                   </span>
                 </label>
-                <div className="relative">
-                  <FaLayerGroup
-                    className={`absolute left-5 top-1/2 -translate-y-1/2 ${
-                      isEditMode ? 'text-secondary/40' : 'text-primary/40'
-                    }`}
-                  />
-                  <input
-                    type="text"
-                    value={selectedGenre.name}
-                    onChange={e =>
-                      setSelectedGenre({
-                        ...selectedGenre,
-                        name: e.target.value,
-                      })
-                    }
-                    className="input input-bordered w-full h-16 pl-14 rounded-2xl bg-base-200/30 border-none focus:bg-white transition-all font-bold"
-                    placeholder="Enter name..."
-                  />
-                </div>
+                <input
+                  required
+                  type="text"
+                  placeholder="e.g. Science Fiction"
+                  value={selectedGenre.name}
+                  onChange={e =>
+                    setSelectedGenre({ ...selectedGenre, name: e.target.value })
+                  }
+                  className={`input w-full h-12 rounded-xl bg-base-200/50 border-none focus:ring-1 outline-0 transition-all font-medium text-sm ${
+                    isEditMode ? 'focus:ring-secondary' : 'focus:ring-primary'
+                  }`}
+                />
               </div>
 
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-bold text-[11px] uppercase tracking-widest text-base-content/50">
+                  <span className="label-text font-semibold text-[11px] uppercase tracking-wider opacity-60">
+                    Description
+                  </span>
+                </label>
+                <textarea
+                  placeholder="Tell us about this category..."
+                  value={selectedGenre.description}
+                  onChange={e =>
+                    setSelectedGenre({
+                      ...selectedGenre,
+                      description: e.target.value,
+                    })
+                  }
+                  className={`textarea w-full h-24 p-4 rounded-xl bg-base-200/50 border-none transition-all font-medium text-sm focus:ring-1 outline-0 resize-none ${
+                    isEditMode ? 'focus:ring-secondary' : 'focus:ring-primary'
+                  }`}
+                ></textarea>
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text font-semibold text-[11px] uppercase tracking-wider opacity-60">
                     Status
                   </span>
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="flex bg-base-200/50 p-1.5 rounded-xl gap-1">
                   {['Active', 'Archived'].map(status => (
                     <button
                       key={status}
@@ -456,12 +381,12 @@ const ManageGenres = () => {
                       onClick={() =>
                         setSelectedGenre({ ...selectedGenre, status })
                       }
-                      className={`btn h-14 rounded-2xl border-2 transition-all font-bold ${
+                      className={`flex-1 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${
                         selectedGenre.status === status
                           ? isEditMode
-                            ? 'btn-secondary'
-                            : 'btn-primary'
-                          : 'btn-ghost border-base-200'
+                            ? 'bg-secondary text-white shadow-sm'
+                            : 'bg-primary text-white shadow-sm'
+                          : 'text-base-content/40 hover:bg-base-300/50'
                       }`}
                     >
                       {status}
@@ -471,20 +396,29 @@ const ManageGenres = () => {
               </div>
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <form method="dialog" className="flex-1">
-                <button className="btn btn-ghost w-full rounded-2xl font-bold h-14">
-                  Cancel
-                </button>
-              </form>
+            {/* Footer */}
+            <div className="px-8 py-6 bg-base-100 border-t border-base-200 shrink-0">
               <button
-                className={`btn ${
+                type="submit"
+                disabled={addMutation.isPending || updateMutation.isPending}
+                className={`btn w-full rounded-xl font-bold h-12 border-none shadow-sm uppercase tracking-widest text-[11px] ${
                   isEditMode ? 'btn-secondary' : 'btn-primary'
-                } flex-[2] rounded-2xl font-bold h-14 border-none shadow-lg uppercase tracking-widest text-xs`}
+                }`}
               >
-                {isEditMode ? 'Update Information' : 'Confirm & Create'}
+                {addMutation.isPending || updateMutation.isPending ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : isEditMode ? (
+                  'Save Changes'
+                ) : (
+                  'Create Genre'
+                )}
               </button>
             </div>
+          </form>
+
+          {/* ক্লোজ বাটনের বাইরে ক্লিক করলে যাতে ব্লার সহ বন্ধ হয় */}
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
           </form>
         </div>
       </dialog>
@@ -496,22 +430,20 @@ const ManageGenres = () => {
             <FaExclamationTriangle size={36} />
           </div>
           <h3 className="font-bold text-2xl text-base-content">
-            Destructive Action
+            Remove Genre?
           </h3>
-          <p className="py-4 text-base-content/60 font-medium leading-relaxed">
-            You are about to delete{' '}
-            <span className="text-error font-black italic">
-              {selectedGenre.name}
-            </span>
-            . This might affect{' '}
-            <span className="badge badge-error text-white font-bold">
-              {selectedGenre.count}
-            </span>{' '}
-            linked books.
+          <p className="py-4 text-base-content/60 font-medium">
+            Are you sure you want to delete{' '}
+            <span className="text-error font-black">{selectedGenre.name}</span>?
+            This action cannot be undone.
           </p>
-          <div className="flex flex-col gap-3 mt-4">
-            <button className="btn btn-error text-white rounded-2xl h-14 font-bold border-none shadow-lg shadow-error/20 uppercase tracking-widest text-xs">
-              Confirm Deletion
+          <div className="flex flex-col gap-2 mt-4">
+            <button
+              onClick={confirmDelete}
+              disabled={deleteMutation.isPending}
+              className="btn btn-error text-white rounded-2xl h-14 font-bold border-none"
+            >
+              {deleteMutation.isPending ? 'Removing...' : 'Confirm Deletion'}
             </button>
             <form method="dialog">
               <button className="btn btn-ghost w-full rounded-2xl font-bold">

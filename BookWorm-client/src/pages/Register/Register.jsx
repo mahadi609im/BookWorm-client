@@ -15,8 +15,10 @@ import {
   HiEye,
 } from 'react-icons/hi2';
 import { FaEyeSlash } from 'react-icons/fa';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Register = () => {
+  const axiosSecure = useAxiosSecure();
   const {
     registerUser,
     updateUserProfile,
@@ -33,36 +35,89 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
   const handleRegister = async data => {
     setLoading(true);
     try {
-      // 1. Create User
+      // ১. Firebase Auth
       await registerUser(data.email, data.password);
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL: data.photo,
+      });
 
-      // 2. Update Profile with Name and Photo
-      await updateUserProfile({ displayName: data.name, photoURL: data.photo });
+      // আপনার ডাটাবেস স্ট্রাকচার অনুযায়ী অবজেক্ট
+      const newUser = {
+        name: data.name,
+        email: data.email,
+        image: data.photo, // আপনার DB তে ফিল্ডের নাম 'image'
+        role: 'user',
+        status: 'active',
+        joined: new Date().toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }), // '20 Dec 2025' ফরম্যাট
+        readingChallenge: {
+          annualGoal: 0,
+          booksReadThisYear: 0,
+        },
+        genreBreakdown: [],
+        recentActivity: [],
+      };
 
-      toast.success('Registration successful');
-      navigate('/');
+      const res = await axiosSecure.post('/users', newUser);
+
+      if (res.data.insertedId || res.status === 200) {
+        toast.success('Welcome to BookWorm!');
+        navigate('/');
+      }
     } catch (err) {
-      toast.error(err.message || 'Registration failed. Please try again.');
+      toast.error(err.message);
+    } finally {
       setLoading(false);
     }
   };
 
+  // গুগল সাইন-ইন (বক্সের ভেতরেই ডাটাবেস অপারেশন)
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await signInWithGoogle();
-      toast.success('Joined successfully via Google!');
-      navigate('/');
-    } catch {
+      const result = await signInWithGoogle();
+      const user = result.user;
+
+      const googleUser = {
+        name: user.displayName,
+        email: user.email,
+        image: user.photoURL, // DB ফিল্ড 'image'
+        role: 'user',
+        status: 'active',
+        joined: new Date().toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }),
+        readingChallenge: {
+          annualGoal: 0,
+          booksReadThisYear: 0,
+        },
+        genreBreakdown: [],
+        recentActivity: [],
+      };
+
+      // এখানে fetch এর বদলে axiosSecure ব্যবহার করুন consistency এর জন্য
+      const res = await axiosSecure.post('/users', googleUser);
+
+      if (res.data.insertedId || res.status === 200) {
+        toast.success('Joined successfully via Google!');
+        navigate('/');
+      }
+    } catch (err) {
+      console.error(err);
       toast.error('Google Sign-In failed.');
+    } finally {
       setLoading(false);
     }
   };
-
   if (loading) return <Loading />;
 
   return (
