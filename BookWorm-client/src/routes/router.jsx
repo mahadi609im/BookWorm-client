@@ -23,6 +23,7 @@ import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
 import ModerateReviews from '../pages/Dashboard/Admin/ModerateReviews';
 import ManageTutorials from '../pages/Dashboard/Admin/ManageTutorials';
 import Profile from '../pages/Profile/Profile';
+import AdminRoute from '../Components/PrivateRoute/AdminRoute';
 
 // Note: If you have a PrivateRoute/AdminRoute, apply them to the "element" prop
 // Example: element: <PrivateRoute><MyLibrary /></PrivateRoute>
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
         element: <Navigate to="/my-library" />, // Default landing page
       },
       {
-        path: 'dashboard',
+        path: 'home',
         element: <UserHome />,
       },
       {
@@ -77,31 +78,59 @@ const router = createBrowserRouter([
   // --- Admin Dashboard Routes ---
   {
     path: '/admin-dashboard',
-    element: <DashBoardLayout />, // Usually contains a Sidebar and Sidebar-Header
+    element: (
+      <AdminRoute>
+        <DashBoardLayout />
+      </AdminRoute>
+    ),
     children: [
       {
         index: true,
-        element: <AdminDashboard />,
+        element: (
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        ),
       },
       {
         path: 'manage-books',
-        element: <ManageBooks />,
+        element: (
+          <AdminRoute>
+            <ManageBooks />
+          </AdminRoute>
+        ),
       },
       {
         path: 'manage-genres',
-        element: <ManageGenres />,
+        element: (
+          <AdminRoute>
+            <ManageGenres />
+          </AdminRoute>
+        ),
       },
       {
         path: 'manage-users',
-        element: <ManageUsers />,
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
       },
       {
         path: 'moderate-reviews',
-        element: <ModerateReviews />,
+        element: (
+          <AdminRoute>
+            <ModerateReviews />
+          </AdminRoute>
+        ),
       },
       {
         path: 'manage-tutorials',
-        element: <ManageTutorials />,
+        element: (
+          <AdminRoute>
+            <ManageTutorials />
+          </AdminRoute>
+        ),
       },
     ],
   },

@@ -16,8 +16,7 @@ import Loading from '../../Components/Loading/Loading';
 import { BsEyeSlash } from 'react-icons/bs';
 
 const Login = () => {
-  const { loginUser, signInWithGoogle, loading, setLoading } =
-    useContext(AuthContext);
+  const { loginUser, loading, setLoading } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,18 +57,6 @@ const Login = () => {
       }
     } catch (err) {
       toast.error(err.message || 'Invalid credentials. Please try again.');
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setLoading(true);
-    try {
-      await signInWithGoogle();
-      toast.success('Google Login Successful!');
-      navigate('/my-library', { replace: true });
-    } catch {
-      toast.error('Google Sign-In failed.');
       setLoading(false);
     }
   };
@@ -181,18 +168,6 @@ const Login = () => {
               />
               <span className="font-bold text-xs text-base-content/70 uppercase tracking-widest">
                 Auto-fill Demo
-              </span>
-            </button>
-
-            {/* Google Login Button */}
-            <button
-              onClick={handleGoogleLogin}
-              type="button"
-              className="btn btn-outline border-base-300 hover:bg-base-300 w-full h-14 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
-            >
-              <FcGoogle size={24} />
-              <span className="font-bold text-xs text-base-content/70 uppercase tracking-widest">
-                Continue with Google
               </span>
             </button>
           </div>

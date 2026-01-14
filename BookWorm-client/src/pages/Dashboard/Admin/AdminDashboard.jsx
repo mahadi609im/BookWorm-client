@@ -24,7 +24,7 @@ import {
   FaCheck,
 } from 'react-icons/fa';
 import { Link } from 'react-router';
-import Swal from 'sweetalert2'; // Logic added for alerts
+import Swal from 'sweetalert2';
 import Loading from '../../../Components/Loading/Loading';
 
 const AdminDashboard = () => {
