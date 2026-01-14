@@ -21,9 +21,10 @@ const LibraryGrid = ({ books = [], activeTab }) => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [newProgress, setNewProgress] = useState('');
 
-  // ১. প্রগ্রেস আপডেটের জন্য Mutation
+  // ১. প্রগ্রেস আপডেটের জন্য Mutation (Updated Logic)
   const updateProgressMutation = useMutation({
     mutationFn: async ({ id, progress }) => {
+      // এখানে সরাসরি progress অবজেক্ট আকারে পাঠানো হচ্ছে
       const res = await axiosSecure.patch(`/library/${id}`, { progress });
       return res.data;
     },
@@ -43,36 +44,56 @@ const LibraryGrid = ({ books = [], activeTab }) => {
     },
   });
 
-  // ২. ডিলিট বাটন ফাংশন (লজিক অ্যাড করতে পারেন)
+  // handleUpdateSubmit ফাংশন (Updated with correct field check)
+  const handleUpdateSubmit = e => {
+    e.preventDefault();
+
+    // ডাটাবেস অনুযায়ী totalPage বা totalPage দুটোর যেকোনোটি চেক করবে
+    const maxPages = selectedBook.totalPage || selectedBook.totalPage;
+    const progressValue = parseInt(newProgress);
+
+    if (progressValue > maxPages) {
+      return Swal.fire(
+        'Wait!',
+        `Progress cannot exceed total pages (${maxPages}).`,
+        'warning'
+      );
+    }
+
+    updateProgressMutation.mutate({
+      id: selectedBook._id,
+      progress: progressValue,
+    });
+  };
+
+  const deleteMutation = useMutation({
+    mutationFn: async id => {
+      const res = await axiosSecure.delete(`/my-library/${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myLibrary', user?.email]);
+      Swal.fire('Deleted!', 'Book removed from library.', 'success');
+    },
+    onError: () => {
+      Swal.fire('Error', 'Could not delete the book.', 'error');
+    },
+  });
+
   const handleDelete = id => {
     Swal.fire({
       title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      text: 'This book will be removed from your library!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, delete it!',
-    }).then(async result => {
+    }).then(result => {
       if (result.isConfirmed) {
-        // এখানে আপনার ডিলিট API কল করবেন
-        console.log('Deleting book:', id);
+        // কনসোল লগের বদলে এখন মিউটেশন কল হবে
+        deleteMutation.mutate(id);
       }
-    });
-  };
-
-  const handleUpdateSubmit = e => {
-    e.preventDefault();
-    if (parseInt(newProgress) > selectedBook.totalPage) {
-      return Swal.fire(
-        'Wait!',
-        'Progress cannot exceed total pages.',
-        'warning'
-      );
-    }
-    updateProgressMutation.mutate({
-      id: selectedBook._id,
-      progress: parseInt(newProgress),
     });
   };
 
@@ -179,14 +200,18 @@ const LibraryGrid = ({ books = [], activeTab }) => {
 
                       <button
                         onClick={() => handleDelete(book._id)}
-                        className="btn btn-sm bg-red-50 hover:bg-error hover:text-white text-error border-none rounded-xl"
+                        disabled={deleteMutation.isPending}
+                        className="btn btn-sm hover:bg-error hover:text-white text-error border-none rounded-xl"
                         title="Remove from Library"
                       >
-                        <FaTrash size={12} />
+                        {deleteMutation.isPending ? (
+                          <span className="loading loading-spinner loading-xs"></span>
+                        ) : (
+                          <FaTrash size={12} />
+                        )}
                       </button>
                     </div>
 
-                    {/* প্রগ্রেস আপডেট বাটন (শুধুমাত্র কারেন্ট ট্যাবে) */}
                     {activeTab === 'reading' && (
                       <button
                         onClick={() => {
@@ -238,7 +263,7 @@ const LibraryGrid = ({ books = [], activeTab }) => {
                     {selectedBook.title}
                   </h4>
                   <p className="text-xs text-base-content/50 mt-1">
-                    Total: {selectedBook.totalPages} Pages
+                    Total: {selectedBook.totalPage} Pages
                   </p>
                 </div>
               </div>

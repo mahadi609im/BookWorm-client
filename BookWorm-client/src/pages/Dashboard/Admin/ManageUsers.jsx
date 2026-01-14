@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
+
 import Swal from 'sweetalert2';
 import Loading from '../../../Components/Loading/Loading';
 import {
@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import { HiAdjustmentsHorizontal } from 'react-icons/hi2';
 import { MdAdminPanelSettings } from 'react-icons/md';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();

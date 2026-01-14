@@ -6,34 +6,37 @@ import {
   FaCheckCircle,
 } from 'react-icons/fa';
 
-const QuickStats = () => {
-  // Demo Data (Eti porobortite backend logic ba context theke ashbe)
+const QuickStats = ({ statsData }) => {
   const stats = [
     {
       id: 1,
       label: 'Total Books',
-      value: '24',
+      // libraryData.length থেকে আসা মান
+      value: statsData?.totalBooks || '0',
       icon: <FaLayerGroup />,
       color: 'bg-blue-500/10 text-blue-600',
     },
     {
       id: 2,
       label: 'Currently Reading',
-      value: '03',
+      // statsData.currentlyReading থেকে আসা মান
+      value: statsData?.currentlyReading || '0',
       icon: <FaBookOpen />,
       color: 'bg-primary/10 text-primary',
     },
     {
       id: 3,
       label: 'Books Finished',
-      value: '18',
+      // statsData.booksRead থেকে আসা মান
+      value: statsData?.finishedBooks || '0',
       icon: <FaCheckCircle />,
       color: 'bg-green-500/10 text-green-600',
     },
     {
       id: 4,
       label: 'Reading Streak',
-      value: '07 Days',
+      // স্ট্রিক মান, ডিফল্ট হিসেবে '07 Days' বা ডাইনামিক
+      value: statsData?.streak ? `${statsData.streak} Days` : '0 Days',
       icon: <FaFire />,
       color: 'bg-orange-500/10 text-orange-600',
     },
@@ -46,11 +49,14 @@ const QuickStats = () => {
           key={stat.id}
           className="bg-white dark:bg-base-100 p-6 rounded-2xl shadow-xl shadow-base-content/5 border border-base-200 flex items-center gap-5 hover:translate-y-[-5px] transition-all duration-300 group"
         >
+          {/* Icon Container */}
           <div
             className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl transition-colors ${stat.color} group-hover:bg-primary group-hover:text-white`}
           >
             {stat.icon}
           </div>
+
+          {/* Label & Value */}
           <div>
             <p className="text-xs font-bold opacity-60 uppercase tracking-widest mb-1">
               {stat.label}

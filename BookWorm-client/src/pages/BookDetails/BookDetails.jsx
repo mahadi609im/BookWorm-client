@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '../../context/AuthContext';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
@@ -13,12 +13,19 @@ import {
   FaUserCircle,
   FaPaperPlane,
 } from 'react-icons/fa';
+import {
+  HiArrowLongLeft,
+  HiOutlineBookOpen,
+  HiOutlineUsers,
+  HiStar,
+} from 'react-icons/hi2';
 
 const BookDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // Rating States
   const [userRating, setUserRating] = useState(0);
@@ -75,8 +82,7 @@ const BookDetails = () => {
           author: book.author,
           cover: book.cover,
           genre: book.genre,
-          // আপনার ডাটাবেসে যদি pages বা totalPages যে নামেই থাকুক, এখানে ম্যাপ হবে
-          totalPages: parseInt(book.totalPages) || 0,
+          totalPage: parseInt(book.totalPage) || 0,
           description: book.description,
         },
       });
@@ -111,17 +117,28 @@ const BookDetails = () => {
       rating: userRating,
       comment: reviewText,
       date: new Date().toLocaleDateString(),
-      status: 'approved', // সরাসরি approved দিলাম যাতে সাথে সাথে দেখা যায়, পেন্ডিং হলে এডমিন এপ্রুভ না করা পর্যন্ত আসবে না
       bookTitle: book.title,
     };
 
     try {
       const res = await axiosSecure.post('/reviews', reviewData);
-      if (res.data.insertedId) {
-        Swal.fire('Submitted!', 'Your review has been posted.', 'success');
+
+      // upsert logic এর কারণে এখানে result চেক করা হচ্ছে
+      if (
+        res.data.upsertedCount > 0 ||
+        res.data.modifiedCount > 0 ||
+        res.data.matchedCount > 0
+      ) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your review has been saved.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false,
+        });
         setReviewText('');
         setUserRating(0);
-        refetchReviews(); // রিভিউ লিস্ট রিফ্রেশ করা
+        refetchReviews(); // রিভিউ লিস্ট রিফ্রেশ হবে
       }
     } catch {
       Swal.fire('Error', 'Could not submit review', 'error');
@@ -139,10 +156,19 @@ const BookDetails = () => {
   const getButtonStyle = type => {
     const isActive = currentShelfStatus === type;
     const baseClass =
-      'btn btn-lg rounded-2xl flex-1 md:flex-none px-8 transition-all duration-300 gap-2';
-    return isActive
-      ? `${baseClass} btn-primary shadow-lg scale-105`
-      : `${baseClass} btn-outline border-base-300`;
+      'group flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all duration-500 border-2 flex-1 md:flex-none';
+
+    const activeStyles = {
+      want: 'bg-primary border-primary text-primary-content shadow-[0_10px_20px_-5px_rgba(var(--p),0.4)] scale-[1.02]',
+      reading:
+        'bg-secondary border-secondary text-secondary-content shadow-[0_10px_20px_-5px_rgba(var(--s),0.4)] scale-[1.02]',
+      read: 'bg-accent border-accent text-accent-content shadow-[0_10px_20px_-5px_rgba(var(--a),0.4)] scale-[1.02]',
+    };
+
+    const inactiveStyles =
+      'bg-base-100/50 border-base-300 text-base-content/60 hover:border-primary/50 hover:text-primary hover:bg-primary/5';
+
+    return `${baseClass} ${isActive ? activeStyles[type] : inactiveStyles}`;
   };
 
   return (
@@ -164,53 +190,154 @@ const BookDetails = () => {
         </div>
 
         <div className="flex-1 space-y-8">
+          {/* --- Back Button --- */}
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-sm font-bold text-base-content/50 hover:text-primary transition-colors uppercase tracking-widest"
+          >
+            <HiArrowLongLeft className="text-xl" /> Back
+          </button>
+
           <div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase">
-                {book.genre}
-              </span>
-              <span className="px-4 py-1.5 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase">
-                {reviews.length} Reviews
-              </span>
+            <div className="flex flex-wrap gap-6 items-center">
+              <div className="flex gap-2 mb-4">
+                <span className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase">
+                  {book.genre}
+                </span>
+                <span className="px-4 py-1.5 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase">
+                  {book.totalReviews || reviews.length} Reviews
+                </span>
+                <span
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase ${
+                    book.status === 'In Stock'
+                      ? 'bg-success/10 text-success'
+                      : 'bg-error/10 text-error'
+                  }`}
+                >
+                  {book.status}
+                </span>
+              </div>
+              <div className="flex gap-4 mb-4">
+                <div className="flex items-center gap-2 group">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center text-lg">
+                    <HiOutlineBookOpen />
+                  </div>
+                  <div>
+                    <p className="text-[9px] uppercase font-black opacity-40 leading-none mb-1">
+                      Total Pages
+                    </p>
+                    <p className="text-sm font-bold text-base-content leading-none">
+                      {book.totalPage}{' '}
+                      <span className="text-[10px] font-medium opacity-50">
+                        pp
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="h-8 w-[1px] bg-base-200"></div>
+                <div className="flex items-center gap-2 group">
+                  <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-500 flex items-center justify-center text-lg">
+                    <HiOutlineUsers />
+                  </div>
+                  <div>
+                    <p className="text-[9px] uppercase font-black opacity-40 leading-none mb-1">
+                      Shelved By
+                    </p>
+                    <p className="text-sm font-bold text-base-content leading-none">
+                      {book.shelvedCount}{' '}
+                      <span className="text-[10px] font-medium opacity-50">
+                        users
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h1 className="text-5xl font-serif font-bold text-base-content leading-tight">
+
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-base-content leading-tight">
               {book.title}
             </h1>
             <p className="text-xl text-base-content/60 font-medium mt-2">
               by <span className="text-primary italic">{book.author}</span>
             </p>
+            <p className="text-[10px] text-base-content/30 mt-1 uppercase tracking-tighter">
+              ID: {book._id}
+            </p>
           </div>
 
-          <p className="text-lg leading-relaxed text-base-content/70 italic bg-base-200/30 p-6 rounded-3xl border-l-4 border-primary">
-            "{book.description}"
-          </p>
+          {/* --- Summary Section --- */}
+          <div className="bg-base-200/50 p-6 rounded-3xl border border-base-300">
+            <h3 className="text-[10px] uppercase font-bold tracking-[2px] text-primary mb-2">
+              Summary
+            </h3>
+            <p className="text-lg leading-relaxed text-base-content/80 font-medium italic">
+              "{book.summary}"
+            </p>
+          </div>
 
-          <div className="flex flex-wrap gap-4">
+          {/* --- Description --- */}
+          <div className="space-y-2">
+            <h3 className="text-[10px] uppercase font-bold tracking-[2px] opacity-40">
+              Description
+            </h3>
+            <p className="text-lg leading-relaxed text-base-content/70">
+              {book.description}
+            </p>
+          </div>
+
+          {/* --- Premium Action Buttons --- */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap gap-3 pt-6">
             <button
               onClick={() => shelfMutation.mutate('want')}
               className={getButtonStyle('want')}
               disabled={shelfMutation.isPending}
             >
-              <FaBookmark />{' '}
-              {currentShelfStatus === 'want' ? 'On Wishlist' : 'Want to Read'}
+              <FaBookmark
+                className={`${
+                  currentShelfStatus === 'want'
+                    ? 'animate-bounce'
+                    : 'group-hover:scale-125 transition-transform'
+                }`}
+              />
+              <span>
+                {currentShelfStatus === 'want' ? 'On Wishlist' : 'Want to Read'}
+              </span>
             </button>
+
             <button
               onClick={() => shelfMutation.mutate('reading')}
               className={getButtonStyle('reading')}
               disabled={shelfMutation.isPending}
             >
-              <FaRegClock />{' '}
-              {currentShelfStatus === 'reading'
-                ? 'Reading Now'
-                : 'Currently Reading'}
+              <FaRegClock
+                className={`${
+                  currentShelfStatus === 'reading'
+                    ? 'animate-spin-slow'
+                    : 'group-hover:rotate-12 transition-transform'
+                }`}
+              />
+              <span>
+                {currentShelfStatus === 'reading'
+                  ? 'Reading Now'
+                  : 'Currently Reading'}
+              </span>
             </button>
+
             <button
               onClick={() => shelfMutation.mutate('read')}
               className={getButtonStyle('read')}
               disabled={shelfMutation.isPending}
             >
-              <FaCheck />{' '}
-              {currentShelfStatus === 'read' ? 'Finished' : 'Mark Finished'}
+              <FaCheck
+                className={`${
+                  currentShelfStatus === 'read'
+                    ? 'scale-125'
+                    : 'group-hover:translate-y-[-2px] transition-transform'
+                }`}
+              />
+              <span>
+                {currentShelfStatus === 'read' ? 'Finished' : 'Mark Finished'}
+              </span>
             </button>
           </div>
         </div>

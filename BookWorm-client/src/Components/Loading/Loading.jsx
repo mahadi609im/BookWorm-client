@@ -2,7 +2,6 @@ import React from 'react';
 
 const Loading = () => {
   return (
-    // bg-base-100 ব্যবহার করা হয়েছে যাতে থিম অনুযায়ী লাইট/ডার্ক মোড কাজ করে
     <div className="flex items-center justify-center min-h-screen bg-base-100 w-full transition-colors duration-300">
       <div className="flex flex-col items-center gap-8">
         {/* Book Animation Container */}
