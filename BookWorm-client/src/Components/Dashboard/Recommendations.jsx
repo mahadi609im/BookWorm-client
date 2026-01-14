@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { FaStar, FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
-import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import Loading from '../Loading/Loading';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Recommendations = ({ favoriteGenres = [], totalRead = 0 }) => {
   const axiosPublic = useAxiosSecure();
@@ -37,9 +37,6 @@ const Recommendations = ({ favoriteGenres = [], totalRead = 0 }) => {
     <div className="bg-white dark:bg-base-100 p-8 rounded-3xl border border-base-200 shadow-sm">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-base-content">
-            Recommended for You
-          </h2>
           <p className="text-sm opacity-60">
             {totalRead < 3
               ? 'Popular picks to get you started'

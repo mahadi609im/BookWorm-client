@@ -1,6 +1,5 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'; // Logic added
-import axios from 'axios'; // Logic added
 import {
   BarChart,
   Bar,
@@ -26,15 +25,16 @@ import {
 import { Link } from 'react-router';
 import Swal from 'sweetalert2';
 import Loading from '../../../Components/Loading/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const AdminDashboard = () => {
   const queryClient = useQueryClient();
-
+  const axiosSecure = useAxiosSecure();
   // --- 1. Fetch Dynamic Stats from Backend ---
   const { data: statsData, isLoading: isStatsLoading } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:5000/admin-stats');
+      const res = await axiosSecure.get('/admin-stats');
       return res.data;
     },
   });
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   const { data: reviews = [], isLoading: isReviewsLoading } = useQuery({
     queryKey: ['admin-reviews'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:5000/reviews/admin');
+      const res = await axiosSecure.get('/reviews/admin');
       return res.data;
     },
   });
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   // --- 3. Mutation for Approving Reviews ---
   const approveMutation = useMutation({
     mutationFn: async id => {
-      return await axios.patch(`http://localhost:5000/reviews/approve/${id}`);
+      return await axiosSecure.patch(`/reviews/approve/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-reviews', 'admin-stats']);
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
   // --- 4. Mutation for Deleting/Rejecting Reviews ---
   const deleteMutation = useMutation({
     mutationFn: async id => {
-      return await axios.delete(`http://localhost:5000/reviews/${id}`);
+      return await axiosSecure.delete(`/reviews/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-reviews']);

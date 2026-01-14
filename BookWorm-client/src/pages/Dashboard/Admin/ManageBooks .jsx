@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import {
   FaPlus,
   FaEdit,
@@ -11,10 +11,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Loading from '../../../Components/Loading/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { AuthContext } from '../../../context/AuthContext';
 
 const ManageBooks = () => {
   const queryClient = useQueryClient();
   const formRef = useRef(null);
+  const axiosSecure = useAxiosSecure();
+  const { user } = useContext(AuthContext);
 
   // States
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,9 +30,7 @@ const ManageBooks = () => {
   const { data: books = [], isLoading } = useQuery({
     queryKey: ['books', searchTerm],
     queryFn: async () => {
-      const res = await axios.get(
-        `http://localhost:5000/books?search=${searchTerm}`
-      );
+      const res = await axiosSecure.get(`/books?search=${searchTerm}`);
       return res.data;
     },
   });
@@ -75,13 +77,15 @@ const ManageBooks = () => {
   // --- 3. Mutations (Add/Update/Delete) ---
   const bookMutation = useMutation({
     mutationFn: async bookData => {
+      // ব্যাকএন্ডের verifyAdmin এর জন্য ইমেল কুয়েরি প্যারামিটারে পাঠাতে হবে
+      const url = isEditMode
+        ? `/books/${selectedBook._id}?email=${user?.email}`
+        : `/books?email=${user?.email}`;
+
       if (isEditMode) {
-        return await axios.patch(
-          `http://localhost:5000/books/${selectedBook._id}`,
-          bookData
-        );
+        return await axiosSecure.patch(url, bookData);
       }
-      return await axios.post('http://localhost:5000/books', bookData);
+      return await axiosSecure.post(url, bookData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['books']);
@@ -103,21 +107,19 @@ const ManageBooks = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async id => {
-      return await axios.delete(`http://localhost:5000/books/${id}`);
+      // ডিলিট করার সময়ও ইমেল পাঠাতে হবে
+      return await axiosSecure.delete(`/books/${id}?email=${user?.email}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['books']);
       document.getElementById('delete_confirm_modal').close();
-
       setSelectedBook(null);
-
       Swal.fire('Deleted!', 'Book removed successfully.', 'success');
     },
     onError: () => {
       Swal.fire('Error', 'Could not delete the book.', 'error');
     },
   });
-
   // --- Handlers ---
   const handleSubmit = async e => {
     e.preventDefault();

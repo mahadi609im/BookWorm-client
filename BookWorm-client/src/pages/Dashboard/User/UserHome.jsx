@@ -44,9 +44,6 @@ const UserHome = () => {
     book => book.shelfType === 'reading'
   );
   const finishedBooks = libraryData.filter(book => book.shelfType === 'read');
-
-  // রিকোয়ারমেন্ট অনুযায়ী Personalized Recommendation লজিক
-  // ইউজারের পড়া বইয়ের জেনারগুলো Recommendations কম্পোনেন্টে পাঠানো হচ্ছে
   const userFavoriteGenres = [...new Set(finishedBooks.map(b => b.genre))];
 
   return (
@@ -61,7 +58,7 @@ const UserHome = () => {
             totalBooks: libraryData.length,
             currentlyReading: currentlyReading.length,
             finishedBooks: finishedBooks.length,
-            streak: statsData?.streak || 0, // ব্যাকএন্ডে স্ট্রিক লজিক থাকলে সেটি দেখাবে
+            streak: statsData?.streak || 0,
           }}
         />
       </section>
