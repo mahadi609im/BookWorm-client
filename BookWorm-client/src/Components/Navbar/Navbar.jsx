@@ -21,7 +21,6 @@ const Navbar = () => {
   const axiosSecure = useAxiosSecure();
 
   // ১. ডাটাবেজ থেকে ইউজারের লেটেস্ট তথ্য আনা
-  // queryKey ['dbUser', user?.email] প্রোফাইল পেজের সাথে মিল থাকায় এক জায়গায় আপডেট হলে সব জায়গায় হবে
   const { data: dbUser = {}, isLoading } = useQuery({
     queryKey: ['dbUser', user?.email],
     queryFn: async () => {
@@ -32,7 +31,7 @@ const Navbar = () => {
     enabled: !!user?.email,
   });
 
-  // Admin Check: ডাটাবেজ রোল অথবা সুপার অ্যাডমিন ইমেইল (নিরাপদ উপায়)
+  // Admin Check
   const isAdmin =
     dbUser?.role === 'admin' || user?.email === 'maha609im@gmail.com';
 
@@ -98,11 +97,15 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow-2xl bg-base-100 border border-base-300 rounded-box w-64 z-[110]"
           >
-            {navLinks.map((link, idx) => (
-              <li key={idx}>
-                <NavLink to={link.path}>{link.name}</NavLink>
-              </li>
-            ))}
+            {navLinks.map((link, idx) => {
+              // কন্ডিশন: My Library শুধুমাত্র ইউজার থাকলে দেখাবে
+              if (link.name === 'My Library' && !user) return null;
+              return (
+                <li key={idx}>
+                  <NavLink to={link.path}>{link.name}</NavLink>
+                </li>
+              );
+            })}
             {!user && (
               <>
                 <li className="border-t border-base-300 mt-2">
@@ -125,22 +128,26 @@ const Navbar = () => {
 
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal gap-2">
-          {navLinks.map((link, idx) => (
-            <li key={idx}>
-              <NavLink
-                to={link.path}
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg font-bold transition-all ${
-                    isActive
-                      ? 'bg-primary text-primary-content shadow-md'
-                      : 'hover:bg-primary/10 text-base-content/80 hover:text-primary'
-                  }`
-                }
-              >
-                {link.name}
-              </NavLink>
-            </li>
-          ))}
+          {navLinks.map((link, idx) => {
+            // কন্ডিশন: My Library শুধুমাত্র ইউজার থাকলে দেখাবে
+            if (link.name === 'My Library' && !user) return null;
+            return (
+              <li key={idx}>
+                <NavLink
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `px-4 py-2 rounded-lg font-bold transition-all ${
+                      isActive
+                        ? 'bg-primary text-primary-content shadow-md'
+                        : 'hover:bg-primary/10 text-base-content/80 hover:text-primary'
+                    }`
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </div>
 

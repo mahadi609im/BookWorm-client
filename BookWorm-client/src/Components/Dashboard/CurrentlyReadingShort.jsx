@@ -5,11 +5,13 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { AuthContext } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
 import Loading from '../Loading/Loading';
+import { Link, useNavigate } from 'react-router';
 
 const CurrentlyReadingShort = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // ১. ইউজার যে বইটি বর্তমানে পড়ছে সেটি আনা
   const { data: readingBooks = [], isLoading } = useQuery({
@@ -72,7 +74,10 @@ const CurrentlyReadingShort = () => {
         <p className="text-xs font-bold text-base-content/30 uppercase mb-2">
           No active book
         </p>
-        <button className="btn btn-ghost btn-sm text-primary">
+        <button
+          onClick={() => navigate('/browse-books')}
+          className="btn btn-ghost btn-sm text-primary"
+        >
           Start a new book
         </button>
       </div>

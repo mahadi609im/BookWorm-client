@@ -1,11 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from 'react-icons/fa';
+import { FaFacebookF, FaLinkedinIn, FaGithub, FaGlobe } from 'react-icons/fa';
 import {
   HiOutlineMail,
   HiOutlinePhone,
@@ -13,6 +8,43 @@ import {
 } from 'react-icons/hi';
 
 const Footer = () => {
+  const socialIcon = [
+    {
+      Icon: FaFacebookF,
+      link: 'https://facebook.com/mahadi609im',
+      label: 'Facebook',
+    },
+    {
+      Icon: FaLinkedinIn,
+      link: 'https://linkedin.com/in/mahadi609im',
+      label: 'LinkedIn',
+    },
+    {
+      Icon: FaGithub,
+      link: 'https://github.com/mahadi609im',
+      label: 'Github',
+    },
+    {
+      Icon: FaGlobe,
+      link: 'https://mahaportfolio-609im.netlify.app/',
+      label: 'Portfolio',
+    },
+  ];
+
+  const supportLink = [
+    {
+      name: 'Terms of Service',
+      path: '/terms',
+    },
+    {
+      name: 'Privacy Policy',
+      path: '/privacy',
+    },
+    {
+      name: 'Help Center',
+      path: '/help',
+    },
+  ];
   return (
     <footer className="bg-base-200 border-t border-base-300 pt-16 pb-8 relative overflow-hidden transition-colors duration-500">
       {/* Background Decor - Increased Opacity for better visibility in Light Mode */}
@@ -31,17 +63,18 @@ const Footer = () => {
               worlds, and join a community of passionate readers.
             </p>
             <div className="flex gap-4 pt-2">
-              {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map(
-                (Icon, idx) => (
-                  <a
-                    key={idx}
-                    href="#"
-                    className="w-10 h-10 rounded-xl bg-base-100 border border-base-300 flex items-center justify-center text-base-content/50 hover:text-primary hover:border-primary hover:shadow-lg transition-all active:scale-90"
-                  >
-                    <Icon size={18} />
-                  </a>
-                )
-              )}
+              {socialIcon.map((social, idx) => (
+                <a
+                  key={idx}
+                  href={social.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="w-10 h-10 rounded-xl bg-base-100 border border-base-300 flex items-center justify-center text-base-content/50 hover:text-primary hover:border-primary hover:shadow-lg transition-all active:scale-90"
+                >
+                  <social.Icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -76,18 +109,14 @@ const Footer = () => {
               Support
             </h3>
             <ul className="space-y-3">
-              {[
-                'Terms of Service',
-                'Privacy Policy',
-                'Cookie Policy',
-                'Help Center',
-              ].map(link => (
-                <li key={link}>
+              {supportLink.map((link, idx) => (
+                <li key={idx}>
                   <a
-                    href="#"
-                    className="text-sm font-bold text-base-content/80 hover:text-primary transition-colors"
+                    href={link.path}
+                    className="text-sm font-bold text-base-content/80 hover:text-primary transition-colors flex items-center group"
                   >
-                    {link}
+                    <span className="w-0 group-hover:w-2 h-[2px] bg-primary mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                    {link.name}
                   </a>
                 </li>
               ))}
@@ -106,16 +135,16 @@ const Footer = () => {
                   size={20}
                 />
                 <span className="text-sm font-medium">
-                  123 Library Lane, Reading City, RC 5678
+                  Gazipur, Dhaka, Bangladesh
                 </span>
               </li>
               <li className="flex items-center gap-3 text-base-content/80">
                 <HiOutlineMail className="text-primary shrink-0" size={20} />
-                <span className="text-sm font-medium">hello@bookworm.com</span>
+                <span className="text-sm font-medium">maha609im@gmail.com</span>
               </li>
               <li className="flex items-center gap-3 text-base-content/80">
                 <HiOutlinePhone className="text-primary shrink-0" size={20} />
-                <span className="text-sm font-medium">+1 (234) 567-890</span>
+                <span className="text-sm font-medium">+880 1609-216725</span>
               </li>
             </ul>
           </div>

@@ -155,8 +155,15 @@ const BookDetails = () => {
 
   const getButtonStyle = type => {
     const isActive = currentShelfStatus === type;
+    const isDisabled = !user || shelfMutation.isPending; // ডিজেবল্ড লজিক
+
     const baseClass =
       'group flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all duration-500 border-2 flex-1 md:flex-none';
+
+    // বাটন যখন ডিজেবল্ড থাকবে তখনকার স্টাইল
+    if (isDisabled) {
+      return `${baseClass} bg-base-200/70  text-white/50 cursor-not-allowed border-gray-200 opacity-60 grayscale-[0.5]`;
+    }
 
     const activeStyles = {
       want: 'bg-primary border-primary text-primary-content shadow-[0_10px_20px_-5px_rgba(var(--p),0.4)] scale-[1.02]',
@@ -287,10 +294,12 @@ const BookDetails = () => {
 
           {/* --- Premium Action Buttons --- */}
           <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap gap-3 pt-6">
+            {/* Want to Read Button */}
             <button
               onClick={() => shelfMutation.mutate('want')}
               className={getButtonStyle('want')}
-              disabled={shelfMutation.isPending}
+              disabled={!user || shelfMutation.isPending}
+              title={!user ? 'Login to add to shelf' : ''}
             >
               <FaBookmark
                 className={`${
@@ -304,10 +313,11 @@ const BookDetails = () => {
               </span>
             </button>
 
+            {/* Currently Reading Button */}
             <button
               onClick={() => shelfMutation.mutate('reading')}
               className={getButtonStyle('reading')}
-              disabled={shelfMutation.isPending}
+              disabled={!user || shelfMutation.isPending}
             >
               <FaRegClock
                 className={`${
@@ -323,10 +333,11 @@ const BookDetails = () => {
               </span>
             </button>
 
+            {/* Mark Finished Button */}
             <button
               onClick={() => shelfMutation.mutate('read')}
               className={getButtonStyle('read')}
-              disabled={shelfMutation.isPending}
+              disabled={!user || shelfMutation.isPending}
             >
               <FaCheck
                 className={`${
@@ -377,8 +388,14 @@ const BookDetails = () => {
               onChange={e => setReviewText(e.target.value)}
             ></textarea>
             <button
+              disabled={!user}
               onClick={handleReviewSubmit}
-              className="btn btn-primary btn-block h-14 rounded-2xl text-white font-bold uppercase shadow-xl"
+              className={`btn btn-block h-14 rounded-2xl font-bold uppercase shadow-xl transition-all duration-300 
+              ${
+                !user
+                  ? 'bg-primary/40 !text-white/50 !cursor-not-allowed border-none shadow-none pointer-events-auto'
+                  : 'btn-primary text-white hover:scale-[1.02]'
+              }`}
             >
               Submit Review <FaPaperPlane className="ml-2" />
             </button>

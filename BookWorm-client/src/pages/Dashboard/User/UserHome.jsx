@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { AuthContext } from '../../../context/AuthContext';
 
 import QuickStats from '../../../Components/Dashboard/QuickStats';
@@ -11,6 +10,7 @@ import ReadingAnalytics from '../../../Components/Dashboard/ReadingAnalytics';
 import ActivityFeed from '../../../Components/Dashboard/ActivityFeed';
 import WelcomeHeader from '../../../Components/Dashboard/WelcomeHeader';
 import Loading from '../../../Components/Loading/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const UserHome = () => {
   const { user } = useContext(AuthContext);

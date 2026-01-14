@@ -24,6 +24,10 @@ import ModerateReviews from '../pages/Dashboard/Admin/ModerateReviews';
 import ManageTutorials from '../pages/Dashboard/Admin/ManageTutorials';
 import Profile from '../pages/Profile/Profile';
 import AdminRoute from '../Components/PrivateRoute/AdminRoute';
+import PrivateRoute from '../Components/PrivateRoute/PrivateRoute';
+import Terms from '../pages/Terms/Terms';
+import Privacy from '../pages/Privacy/Privacy';
+import Help from '../pages/Help/Help';
 
 // Note: If you have a PrivateRoute/AdminRoute, apply them to the "element" prop
 // Example: element: <PrivateRoute><MyLibrary /></PrivateRoute>
@@ -43,8 +47,24 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
+        path: 'terms',
+        element: <Terms></Terms>,
+      },
+      {
+        path: 'privacy',
+        element: <Privacy />,
+      },
+      {
+        path: 'help',
+        element: <Help />,
+      },
+      {
         path: 'profile',
-        element: <Profile />,
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
       },
 
       // --- Main Application/User Routes ---
@@ -62,7 +82,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'my-library',
-        element: <MyLibrary />,
+        element: (
+          <PrivateRoute>
+            <MyLibrary />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'book-details/:id',

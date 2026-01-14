@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { FaTrophy, FaChevronRight } from 'react-icons/fa';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { AuthContext } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
 import Loading from '../Loading/Loading';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const ReadingChallenge = () => {
   const axiosSecure = useAxiosSecure();
@@ -141,9 +141,15 @@ const ReadingChallenge = () => {
         {/* এই বাটনটি এখন ডায়নামিক গোল সেট করতে সাহায্য করবে */}
         <button
           onClick={handleSetGoal}
-          className="w-full py-4 rounded-2xl bg-base-200 hover:bg-primary hover:text-white transition-all duration-300 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+          disabled={!user}
+          className={`w-full py-4 rounded-2xl transition-all duration-300 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 
+    ${
+      !user
+        ? 'bg-base-200/70  text-white/50 cursor-not-allowed' // ডিজেবল্ড অবস্থা
+        : 'bg-base-200 hover:bg-primary hover:text-white cursor-pointer'
+    }`}
         >
-          {goal > 0 ? 'Update Goal' : 'Set Annual Goal'}{' '}
+          {goal > 0 ? 'Update Goal' : 'Set Annual Goal'}
           <FaChevronRight size={10} />
         </button>
       </div>
