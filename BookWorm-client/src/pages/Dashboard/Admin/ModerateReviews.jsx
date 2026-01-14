@@ -23,7 +23,6 @@ const ModerateReviews = () => {
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ['admin-reviews', filterStatus],
     queryFn: async () => {
-      // আপনি যদি ব্যাকএন্ডে কুয়েরি প্যারাম সাপোর্ট করেন তবে status পাঠানো ভালো
       const res = await axiosSecure.get('/reviews/admin');
       return res.data;
     },

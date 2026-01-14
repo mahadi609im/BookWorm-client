@@ -162,7 +162,7 @@ const BookDetails = () => {
 
     // বাটন যখন ডিজেবল্ড থাকবে তখনকার স্টাইল
     if (isDisabled) {
-      return `${baseClass} bg-base-200/70  text-white/50 cursor-not-allowed border-gray-200 opacity-60 grayscale-[0.5]`;
+      return `${baseClass} bg-primary/70 text-base-300/70 cursor-not-allowed border-gray-200 opacity-60 grayscale-[0.5]`;
     }
 
     const activeStyles = {
@@ -393,7 +393,7 @@ const BookDetails = () => {
               className={`btn btn-block h-14 rounded-2xl font-bold uppercase shadow-xl transition-all duration-300 
               ${
                 !user
-                  ? 'bg-primary/40 !text-white/50 !cursor-not-allowed border-none shadow-none pointer-events-auto'
+                  ? 'bg-primary/40 text-white/50 cursor-not-allowed border-none shadow-none pointer-events-auto'
                   : 'btn-primary text-white hover:scale-[1.02]'
               }`}
             >
