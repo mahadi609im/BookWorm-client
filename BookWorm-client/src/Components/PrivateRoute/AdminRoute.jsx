@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Navigate, useLocation } from 'react-router';
+import { Navigate } from 'react-router';
 import { AuthContext } from '../../context/AuthContext';
 import useUserRole from '../../hooks/useUserRole';
 import Loading from '../Loading/Loading';
@@ -7,7 +7,6 @@ import Loading from '../Loading/Loading';
 const AdminRoute = ({ children }) => {
   const { user, loading: authLoading } = useContext(AuthContext);
   const { role, isLoading: roleLoading } = useUserRole();
-  const location = useLocation();
 
   if (authLoading || roleLoading) {
     return <Loading />;
@@ -17,7 +16,7 @@ const AdminRoute = ({ children }) => {
     return children;
   }
 
-  return <Navigate to="/" state={{ from: location }} replace />;
+  return <Navigate to="/forbidden" />;
 };
 
 export default AdminRoute;

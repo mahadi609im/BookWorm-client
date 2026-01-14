@@ -28,6 +28,7 @@ import PrivateRoute from '../Components/PrivateRoute/PrivateRoute';
 import Terms from '../pages/Terms/Terms';
 import Privacy from '../pages/Privacy/Privacy';
 import Help from '../pages/Help/Help';
+import Forbidden from '../pages/Forbidden/Forbidden';
 
 // Note: If you have a PrivateRoute/AdminRoute, apply them to the "element" prop
 // Example: element: <PrivateRoute><MyLibrary /></PrivateRoute>
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: 'help',
         element: <Help />,
+      },
+      {
+        path: 'forbidden',
+        element: <Forbidden />,
       },
       {
         path: 'profile',
@@ -103,9 +108,11 @@ const router = createBrowserRouter([
   {
     path: '/admin-dashboard',
     element: (
-      <AdminRoute>
-        <DashBoardLayout />
-      </AdminRoute>
+      <PrivateRoute>
+        <AdminRoute>
+          <DashBoardLayout />
+        </AdminRoute>
+      </PrivateRoute>
     ),
     children: [
       {
