@@ -77,17 +77,32 @@ const ManageBooks = () => {
   // --- 3. Mutations (Add/Update/Delete) ---
   const bookMutation = useMutation({
     mutationFn: async bookData => {
-      // ব্যাকএন্ডের verifyAdmin এর জন্য ইমেল কুয়েরি প্যারামিটারে পাঠাতে হবে
+      // ১. ইমেল চেক (ইমেল না থাকলে রিকোয়েস্ট যাবে না)
+      if (!user?.email) {
+        Swal.fire(
+          'Error',
+          'User email not found! Please login again.',
+          'error'
+        );
+        throw new Error('User email not found!');
+      }
+
+      // ২. ডাইনামিক URL তৈরি
       const url = isEditMode
         ? `/books/${selectedBook._id}?email=${user?.email}`
         : `/books?email=${user?.email}`;
 
+      // ৩. রিকোয়েস্ট পাঠানো
       if (isEditMode) {
-        return await axiosSecure.patch(url, bookData);
+        const response = await axiosSecure.patch(url, bookData);
+        return response.data;
+      } else {
+        const response = await axiosSecure.post(url, bookData);
+        return response.data;
       }
-      return await axiosSecure.post(url, bookData);
     },
     onSuccess: () => {
+      // ক্যাশ ক্লিয়ার করা যেন টেবিল সাথে সাথে আপডেট হয়
       queryClient.invalidateQueries(['books']);
       closeModal();
       Swal.fire(
@@ -97,9 +112,10 @@ const ManageBooks = () => {
       );
     },
     onError: error => {
+      console.error('Mutation Error:', error);
       Swal.fire(
         'Error',
-        error.response?.data?.message || 'Something went wrong',
+        error.response?.data?.message || 'Something went wrong while saving',
         'error'
       );
     },
@@ -107,8 +123,12 @@ const ManageBooks = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async id => {
-      // ডিলিট করার সময়ও ইমেল পাঠাতে হবে
-      return await axiosSecure.delete(`/books/${id}?email=${user?.email}`);
+      if (!user?.email) throw new Error('User email not found!');
+      // ডিলিট করার সময়ও ইমেল প্যারামিটার পাঠানো হচ্ছে
+      const response = await axiosSecure.delete(
+        `/books/${id}?email=${user?.email}`
+      );
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['books']);
@@ -116,10 +136,15 @@ const ManageBooks = () => {
       setSelectedBook(null);
       Swal.fire('Deleted!', 'Book removed successfully.', 'success');
     },
-    onError: () => {
-      Swal.fire('Error', 'Could not delete the book.', 'error');
+    onError: error => {
+      Swal.fire(
+        'Error',
+        error.response?.data?.message || 'Could not delete the book.',
+        'error'
+      );
     },
   });
+
   // --- Handlers ---
   const handleSubmit = async e => {
     e.preventDefault();
